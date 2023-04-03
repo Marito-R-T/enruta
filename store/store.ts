@@ -1,8 +1,17 @@
 import { configureStore, ThunkAction, Action, combineReducers } from "@reduxjs/toolkit";
-import { authSlice } from "./authSlice";
+import { slice } from "./authSlice";
 import { createWrapper } from "next-redux-wrapper";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /*const makeStore = () =>
   configureStore({
@@ -13,7 +22,7 @@ import storage from "redux-persist/lib/storage";
   });*/
 
 const rootReducer = combineReducers({
-    [authSlice.name]: authSlice.reducer,
+    [slice.name]: slice.reducer,
   });
   
   const makeConfiguredStore = () =>
@@ -25,18 +34,26 @@ const rootReducer = combineReducers({
   export const makeStore = () => {
     const isServer = typeof window === "undefined";
     if (isServer) {
+      console.log("SERVER")
       return makeConfiguredStore();
     } else {
+      console.log("no SERVER")
       // we need it only on client side
       const persistConfig = {
         key: "nextjs",
         whitelist: ["auth"], // make sure it does not clash with server keys
-        storage,
+        storage: AsyncStorage,
       };
       const persistedReducer = persistReducer(persistConfig, rootReducer);
       let store: any = configureStore({
         reducer: persistedReducer,
         devTools: process.env.NODE_ENV !== "production",
+        middleware: (getDefaultMiddleware) =>
+          getDefaultMiddleware({
+            serializableCheck: {
+              ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+          }),
       });
       store.__persistor = persistStore(store); // Nasty hack
       return store;
