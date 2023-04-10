@@ -50,7 +50,6 @@ function Overview() {
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">
-            <Logo />
             <Box
               display="flex"
               alignItems="center"

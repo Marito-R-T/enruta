@@ -187,7 +187,7 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <Link href="/" passHref>
+                <Link href="/home" passHref>
                   <Button
                     className={currentRoute === '="/' ? 'active' : ''}
                     disableRipple
@@ -206,7 +206,7 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Dashboards
+              Client
             </ListSubheader>
           }
         >
@@ -249,7 +249,7 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Management
+              Administration
             </ListSubheader>
           }
         >
@@ -279,7 +279,7 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Accounts
+              Operator
             </ListSubheader>
           }
         >
@@ -320,7 +320,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        <List
+        {/*<List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -536,7 +536,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+                  </List>*/}
       </MenuWrapper>
     </>
   );

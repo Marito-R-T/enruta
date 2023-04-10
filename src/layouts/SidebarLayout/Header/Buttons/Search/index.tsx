@@ -119,7 +119,7 @@ function HeaderSearch() {
                 </InputAdornment>
               )
             }}
-            placeholder="Search terms here..."
+            placeholder="Search packages here..."
             fullWidth
             label="Search"
           />

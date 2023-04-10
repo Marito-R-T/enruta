@@ -5,11 +5,12 @@ import {
   TooltipProps,
   tooltipClasses,
   styled,
-  useTheme
+  useTheme,
+  Button
 } from '@mui/material';
 import NextLink from 'next/link';
 
-const LogoWrapper = styled(NextLink)(
+const LogoWrapper = styled(Button)(
   ({ theme }) => `
         color: ${theme.palette.text.primary};
         display: flex;
@@ -94,15 +95,15 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   }
 }));
 
-function Logo() {
+function Logo({onClick}) {
   const theme = useTheme();
 
   return (
     <TooltipWrapper
-      title="Tokyo Free Black Next.js Typescript Admin Dashboard"
+      title="Enruta"
       arrow
     >
-      <LogoWrapper href="/">
+      <LogoWrapper onClick={onClick}>
         <Badge
           sx={{
             '.MuiBadge-badge': {

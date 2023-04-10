@@ -1,6 +1,6 @@
 import { useState, ReactNode, createContext } from 'react';
 type SidebarContext = {
-  sidebarToggle: any;
+  sidebarToggle: boolean;
   toggleSidebar: () => void;
   closeSidebar: () => void;
 };

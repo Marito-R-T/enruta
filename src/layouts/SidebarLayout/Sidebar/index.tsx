@@ -36,12 +36,13 @@ function Sidebar() {
 
   return (
     <>
-      <SidebarWrapper
+      {/* sidebarToggle && <SidebarWrapper
         sx={{
           display: {
             xs: 'none',
             lg: 'inline-block'
           },
+          mt: `${theme.header.height}`,
           position: 'fixed',
           left: 0,
           top: 0,
@@ -61,7 +62,7 @@ function Sidebar() {
                 width: 52
               }}
             >
-              <Logo />
+              <Logo onClick={closeSidebar} />
             </Box>
           </Box>
           <Divider
@@ -80,7 +81,7 @@ function Sidebar() {
         />
         <Box p={2}>
           <Button
-            href="https://bloomui.com"
+            href="/"
             target="_blank"
             rel="noopener noreferrer"
             variant="contained"
@@ -91,15 +92,21 @@ function Sidebar() {
             Upgrade to PRO
           </Button>
         </Box>
-      </SidebarWrapper>
-      <Drawer
+        </SidebarWrapper> */}
+      {<Drawer
         sx={{
-          boxShadow: `${theme.sidebar.boxShadow}`
+          display: {
+            xs: 'none',
+            lg: 'inline-block'
+          },
+          left: 0,
+          top: 0,
+          boxShadow: theme.sidebar.boxShadow
         }}
         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
         open={sidebarToggle}
         onClose={closeSidebar}
-        variant="temporary"
+        variant="persistent"
         elevation={9}
       >
         <SidebarWrapper
@@ -111,19 +118,24 @@ function Sidebar() {
           }}
         >
           <Scrollbar>
-            <Box mt={3}>
+            <Box 
+              pt={1}
+              sx={{
+                height: theme.header.height
+              }}
+            >
               <Box
-                mx={2}
+                mr={4}
                 sx={{
                   width: 52
                 }}
+                ml={'auto'}
               >
-                <Logo />
+                <Logo onClick={toggleSidebar} />
               </Box>
             </Box>
             <Divider
               sx={{
-                mt: theme.spacing(3),
                 mx: theme.spacing(2),
                 background: theme.colors.alpha.trueWhite[10]
               }}
@@ -131,7 +143,7 @@ function Sidebar() {
             <SidebarMenu />
           </Scrollbar>
         </SidebarWrapper>
-      </Drawer>
+      </Drawer>}
     </>
   );
 }

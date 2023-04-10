@@ -1,5 +1,6 @@
-import { FC, ReactNode } from 'react';
-import { Box, alpha, lighten, useTheme } from '@mui/material';
+import { FC, ReactNode, useContext } from 'react';
+import { Box, alpha, lighten, useTheme, styled } from '@mui/material';
+import { SidebarContext } from '@/contexts/SidebarContext';
 import PropTypes from 'prop-types';
 
 import Sidebar from './Sidebar';
@@ -9,9 +10,28 @@ interface SidebarLayoutProps {
   children?: ReactNode;
 }
 
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${theme.sidebar.width}`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
+
 const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
   const theme = useTheme();
-
+  const { sidebarToggle } = useContext(SidebarContext);
   return (
     <>
       <Box
@@ -43,20 +63,17 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
       >
         <Header />
         <Sidebar />
-        <Box
+        <Main
           sx={{
-            position: 'relative',
-            zIndex: 5,
-            display: 'block',
-            flex: 1,
             pt: `${theme.header.height}`,
             [theme.breakpoints.up('lg')]: {
-              ml: `${theme.sidebar.width}`
+              ml: sidebarToggle ? `${theme.sidebar.width}` : `0px`
             }
           }}
+          open={sidebarToggle}
         >
           <Box display="block">{children}</Box>
-        </Box>
+        </Main>
       </Box>
     </>
   );
