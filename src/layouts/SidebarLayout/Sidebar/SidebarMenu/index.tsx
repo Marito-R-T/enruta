@@ -14,24 +14,9 @@ import Link from '@/components/Link';
 import { SidebarContext } from '@/contexts/SidebarContext';
 
 import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
-import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
-import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
-import BallotTwoToneIcon from '@mui/icons-material/BallotTwoTone';
-import BeachAccessTwoToneIcon from '@mui/icons-material/BeachAccessTwoTone';
-import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
-import FilterVintageTwoToneIcon from '@mui/icons-material/FilterVintageTwoTone';
-import HowToVoteTwoToneIcon from '@mui/icons-material/HowToVoteTwoTone';
-import LocalPharmacyTwoToneIcon from '@mui/icons-material/LocalPharmacyTwoTone';
-import RedeemTwoToneIcon from '@mui/icons-material/RedeemTwoTone';
-import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-import TrafficTwoToneIcon from '@mui/icons-material/TrafficTwoTone';
-import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone';
-import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
-import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
-import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
-import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
+import SidebarClient from './SidebarClient';
+import SidebarAdmin from './SidebarAdmin';
+import SidebarOperator from './SidebarOperator';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -192,7 +177,7 @@ function SidebarMenu() {
                     className={currentRoute === '="/' ? 'active' : ''}
                     disableRipple
                     component="p"
-                    onClick={closeSidebar}
+                    // onClick={closeSidebar}
                     startIcon={<DesignServicesTwoToneIcon />}
                   >
                     Overview
@@ -202,124 +187,11 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Client
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Link href="/dashboards/tasks" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/dashboards/tasks' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<BrightnessLowTwoToneIcon />}
-                  >
-                    Manage Tasks
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/applications/messenger" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/applications/messenger' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<MmsTwoToneIcon />}
-                  >
-                    Messenger
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Administration
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Link href="/management/transactions" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/management/transactions'
-                        ? 'active'
-                        : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<TableChartTwoToneIcon />}
-                  >
-                    Transactions List
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Operator
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Link href="/management/profile" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/management/profile' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<AccountCircleTwoToneIcon />}
-                  >
-                    User Profile
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/management/profile/settings" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/management/profile/settings'
-                        ? 'active'
-                        : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<DisplaySettingsTwoToneIcon />}
-                  >
-                    Account Settings
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
+        {/* <SidebarClient/> */}
+        <SidebarAdmin/>
+        {/* <SidebarOperator/> */}
+        
+        
         {/*<List
           component="div"
           subheader={

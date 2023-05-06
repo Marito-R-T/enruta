@@ -114,7 +114,7 @@ function Logo({onClick}) {
           }}
           overlap="circular"
           color="success"
-          badgeContent="1.0"
+          // badgeContent="1.0"
         >
           <LogoSignWrapper>
             <LogoSign>

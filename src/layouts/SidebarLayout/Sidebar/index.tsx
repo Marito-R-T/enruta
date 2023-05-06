@@ -93,7 +93,7 @@ function Sidebar() {
           </Button>
         </Box>
         </SidebarWrapper> */}
-      {<Drawer
+      <Drawer
         sx={{
           display: {
             xs: 'none',
@@ -143,7 +143,7 @@ function Sidebar() {
             <SidebarMenu />
           </Scrollbar>
         </SidebarWrapper>
-      </Drawer>}
+      </Drawer>
     </>
   );
 }

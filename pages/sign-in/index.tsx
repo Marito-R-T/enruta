@@ -42,7 +42,7 @@ export default function SignIn() {
             }}
           >
             <h1>ENRUTE INC.</h1>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               {/* <LockOutlinedIcon /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -69,10 +69,10 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -83,12 +83,12 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#">
+                  {/* <Link href="#">
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </Grid>
                 <Grid item>
-                  <Link href="#">
+                  <Link href="/sign-up">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

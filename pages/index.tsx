@@ -45,7 +45,7 @@ function Overview() {
   return (
     <OverviewWrapper>
       <Head>
-        <title>Tokyo Free Black NextJS Typescript Admin Dashboard</title>
+        <title>ENRUTA</title>
       </Head>
       <HeaderWrapper>
         <Container maxWidth="lg">

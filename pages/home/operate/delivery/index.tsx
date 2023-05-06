@@ -3,7 +3,9 @@ import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
 import PageHeader from '@/content/Home/PageHeader';
 import Footer from '@/components/Footer';
+
 import {
+  Typography,
   Grid,
   Tab,
   Tabs,
@@ -17,8 +19,6 @@ import {
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
 import TaskSearch from '@/content/Home/TaskSearch';
-
-import axios from 'axios';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -102,7 +102,7 @@ const TabsContainerWrapper = styled(Box)(
   `
 );
 
-function HomeTasks() {
+function DeliveryOp() {
 
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
@@ -115,92 +115,40 @@ function HomeTasks() {
     setCurrentTab(value);
   };
 
-  getApi();
-
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>EnruteOP</title>
       </Head>
       <PageTitleWrapper>
-        <PageHeader />
+        <Box
+        display="flex"
+        alignItems={{ xs: 'stretch', md: 'center' }}
+        flexDirection={{ xs: 'column', md: 'row' }}
+        justifyContent="space-between"
+        >
+        <Box display="flex" alignItems="center">
+            <Box>
+            <Typography variant="h3" component="h3" gutterBottom>
+                Entregas {/*user.name*/}
+            </Typography>
+            <Typography variant="subtitle2">
+                {/* Manage your day to day packages! Enjoy this International Experience. */}
+            </Typography>
+            </Box>
+        </Box>
+        </Box>
       </PageTitleWrapper>
+
+
       <Container maxWidth="lg">
-        <TabsContainerWrapper>
-          <Tabs
-            onChange={handleTabsChange}
-            value={currentTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            textColor="primary"
-            indicatorColor="primary"
-          >
-            {tabs.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
-            ))}
-          </Tabs>
-        </TabsContainerWrapper>
-        <Card variant="outlined">
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="stretch"
-            spacing={0}
-          >
-            {currentTab === 'analytics' && (
-              <>
-                <Grid item xs={12}>
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                </Grid>
-              </>
-            )}
-            {currentTab === 'taskSearch' && (
-              <Grid item xs={12}>
-                <Box p={4}>
-                  {/*<TaskSearch />*/}
-                </Box>
-              </Grid>
-            )}
-          </Grid>
-        </Card>
+        
       </Container>
       <Footer />
     </>
   );
 }
 
-HomeTasks.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
+DeliveryOp.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
 
-async function getApi() {
-  const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-  console.log(response);
-}
-
-// const response = await axios.get('https://api.example.com/data', {
-//   auth: {
-//     username: 'myusername',
-//     password: 'mypassword'
-//   }
-// });
-
-// const response = await axios.post('https://api.example.com/data', {
-//   name: 'John Doe',
-//   email: 'johndoe@example.com'
-// });
-
-// const response = await axios.get('https://api.example.com/data');
-
-
-export default HomeTasks;
-
-
-
+export default DeliveryOp;
