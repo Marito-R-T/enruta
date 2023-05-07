@@ -1,38 +1,22 @@
 
-import {Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, Input, TextField, ThemeProvider, Typography, createTheme, styled, useTheme} from '@mui/material';
+import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typography, useTheme} from '@mui/material';
 import Link from 'next/link';
-
-
-function Copyright(props: any) {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-  
-// const theme = createTheme();
+import React from 'react';
 
 export default function SignIn() {
     const theme = useTheme();
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
-    };
+    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //   event.preventDefault();
+    //   const data = new FormData(event.currentTarget);
+    //   console.log({
+    //     email: data.get('email'),
+    //     password: data.get('password'),
+    //   });
+    // };
   
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
-          {/* <CssBaseline /> */}
           <Box
             sx={{
               marginTop: 8,
@@ -43,12 +27,12 @@ export default function SignIn() {
           >
             <h1>ENRUTE INC.</h1>
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              {/* <LockOutlinedIcon /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
+            {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}> */}
               <TextField
                 margin="normal"
                 required
@@ -58,6 +42,10 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={false}
+                inputProps= {{
+                  "data-testid": "email"
+                }}
               />
               <TextField
                 margin="normal"
@@ -68,11 +56,12 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={false}
+                inputProps= {{
+                  "aria-label": "password",
+                  "data-testid": "password"
+                }}
               />
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -83,9 +72,6 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  {/* <Link href="#">
-                    Forgot password?
-                  </Link> */}
                 </Grid>
                 <Grid item>
                   <Link href="/sign-up">
@@ -95,7 +81,6 @@ export default function SignIn() {
               </Grid>
             </Box>
           </Box>
-          {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
       </ThemeProvider>
     );
