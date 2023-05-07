@@ -1,6 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import SignIn from '../../../pages/sign-in/index';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import "@testing-library/jest-dom"
+import SignIn from '../../../pages/sign-in/index';
+// import SignIn from '@/pages/sign-in/index';
+
 
 
 describe('SignIn component', () => {
