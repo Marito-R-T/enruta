@@ -1,4 +1,6 @@
+import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
 import PageHeader from '@/content/Home/PageHeader';
@@ -51,6 +53,7 @@ function RutesAdmin() {
             </Typography> */}
           </Grid>
           <Grid item>
+          <Link href="/home/admin/routes/new-route">
             <Button
               sx={{ mt: { xs: 2, md: 0 } }}
               variant="contained"
@@ -58,6 +61,8 @@ function RutesAdmin() {
             >
               Crear Nueva Ruta
             </Button>
+          </Link>
+            
           </Grid>
         </Grid>
       </PageTitleWrapper>

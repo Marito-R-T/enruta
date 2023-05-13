@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
+    "types": ["node", "react", "react-dom"],
     
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -33,6 +33,6 @@
       "@/pages/*": ["./pages/*"]
     }
   },
-  "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["src", "next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/home/admin/routes/new-route"],
   "exclude": ["node_modules"]
 }

@@ -1,18 +1,46 @@
 
 import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typography, useTheme} from '@mui/material';
+import axios from 'axios';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import { postLogin } from '../../services/AuthenticationServices/api';
 
 export default function SignIn() {
     const theme = useTheme();
-    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //   event.preventDefault();
-    //   const data = new FormData(event.currentTarget);
-    //   console.log({
-    //     email: data.get('email'),
-    //     password: data.get('password'),
-    //   });
-    // };
+    const [formData, setFormData] = useState({
+      username: '',
+      password: '',
+    });
+    const [errors, setErrors] = useState({
+      username: false,
+      password: false,
+    });
+    // getApi();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+      // Validar el campo después de cada cambio y establecer el estado de error
+      setErrors({ ...errors, [name]: !value });
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      // const data = new FormData(event.currentTarget);
+      // Realizar validaciones adicionales y enviar el formulario si no hay errores
+      if (formData.username && formData.password) {
+        try {
+          // const response = await postLogin({});
+        } catch (error) {
+          console.error(error);
+          
+        }
+        console.log('Formulario enviado');
+        // Reiniciar el estado y los campos del formulario
+        setFormData({ username: '', password: '' });
+        setErrors({ username: false, password: false });
+      }
+    };
   
     return (
       <ThemeProvider theme={theme}>
@@ -31,18 +59,22 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
-            {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}> */}
+            {/* <Box component="form" noValidate sx={{ mt: 1 }}> */}
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
+                type='text'
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
-                error={false}
+                value={formData.username}
+                onChange={handleChange}
+                error={errors.username} // Aplicar la clase de error al TextField si el estado de error es verdadero
+                helperText={errors.username ? 'Campo requerido' : ''}
                 inputProps= {{
                   "data-testid": "email"
                 }}
@@ -56,7 +88,10 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                error={false}
+                value={formData.password}
+                onChange={handleChange}
+                error={errors.password}
+                helperText={errors.password ? 'Campo requerido' : ''}
                 inputProps= {{
                   "aria-label": "password",
                   "data-testid": "password"
@@ -67,6 +102,7 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                
               >
                 Sign In
               </Button>
@@ -85,3 +121,9 @@ export default function SignIn() {
       </ThemeProvider>
     );
   }
+
+
+async function getApi() {
+  const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+  console.log(response);
+}

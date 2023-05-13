@@ -2,7 +2,7 @@ import { FC, useState, createContext, useEffect } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { themeCreator } from './base';
 import { StyledEngineProvider } from '@mui/material/styles';
-
+import React from 'react';
 type ContainerProps = {
   children: React.ReactNode; //👈 children prop typr
 };

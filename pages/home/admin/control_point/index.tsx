@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import React from 'react';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
 import PageHeader from '@/content/Home/PageHeader';
@@ -14,13 +15,16 @@ import {
   Box,
   useTheme,
   styled,
-  Button
+  Button,
+  TextField
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import TaskSearch from '@/content/Home/TaskSearch';
 import TablePCAdmin from './TablePCAdmin';
+import ModalAddPC from './modalAddPC';
+import Modal from '@/components/Modal';
 
 function ControlPointAdmin() {
 
@@ -33,6 +37,18 @@ function ControlPointAdmin() {
 
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
+  };
+
+  const [open, setOpen] = useState(false);
+  // const [selectedValue, setSelectedValue] = useState(emails[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    // setSelectedValue(value);
   };
 
   return (
@@ -51,37 +67,9 @@ function ControlPointAdmin() {
             </Typography> */}
           </Grid>
           <Grid item>
-            <Button
-              sx={{ mt: { xs: 2, md: 0 } }}
-              variant="contained"
-              startIcon={<AddRoundedIcon fontSize="small" />}
-            >
-              Crear Punto de Control
-            </Button>
+            <ModalAddPC/>
           </Grid>
         </Grid>
-        {/* <Box
-            display="flex"
-            alignItems={{ xs: 'stretch', md: 'center' }}
-            flexDirection={{ xs: 'column', md: 'row' }}
-            justifyContent="space-between"
-            >
-            <Box display="flex" alignItems="center">
-                <Box>
-                  <Typography variant="h3" component="h3" gutterBottom>
-                      Puntos de Control
-                  </Typography>
-
-                  <Box display="flex">
-                    <Button color='primary' variant='outlined' sx={{ margin: 1 }}>Crear Punto de Control</Button>
-                    <Button color='secondary' variant='outlined' sx={{ margin: 1 }}>Crear Punto de Control</Button>
-                    <Button color='success' variant='outlined' sx={{ margin: 1 }}>Crear Punto de Control</Button>
-                    <Button color='error' variant='outlined' sx={{ margin: 1 }}>Crear Punto de Control</Button>
-                    <Button color='warning' variant='outlined' sx={{ margin: 1 }}>Crear Punto de Control</Button>
-                  </Box>
-                </Box>
-            </Box>
-        </Box> */}
       </PageTitleWrapper>
       <Container maxWidth="lg">
       <Grid
@@ -96,6 +84,7 @@ function ControlPointAdmin() {
             <Card>
                 <TablePCAdmin/>
             </Card>
+            
           </Grid>
         </Grid>
       </Container>

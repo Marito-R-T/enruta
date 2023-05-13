@@ -2,7 +2,7 @@ import { FC, ReactNode, useContext } from 'react';
 import { Box, alpha, lighten, useTheme, styled } from '@mui/material';
 import { SidebarContext } from '@/contexts/SidebarContext';
 import PropTypes from 'prop-types';
-
+import React from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 

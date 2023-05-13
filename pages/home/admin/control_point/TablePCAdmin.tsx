@@ -1,4 +1,5 @@
 import { FC, ChangeEvent, useState } from 'react';
+import React from 'react';
 import { format } from 'date-fns';
 
 import PropTypes from 'prop-types';
@@ -26,7 +27,7 @@ import {
   } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { Checkpoint } from '@/models/Checkpoint';
+import { Checkpoint, listCheckpointExample } from '@/models/Checkpoint';
 
   interface Filters {
     status?: Checkpoint;
@@ -146,31 +147,36 @@ function TablePCAdmin() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell padding="checkbox">
+                            {/* <TableCell padding="checkbox">
                                 <Checkbox
                                 color="primary"
                                 // checked={selectedAllCryptoOrders}
                                 // indeterminate={selectedSomeCryptoOrders}
                                 // onChange={handleSelectAllCryptoOrders}
                                 />
-                            </TableCell>
-                            <TableCell>Order Details</TableCell>
-                            <TableCell>Order ID</TableCell>
-                            <TableCell>Source</TableCell>
-                            <TableCell align="right">Amount</TableCell>
+                            </TableCell> */}
+                            <TableCell>Checkpoint ID</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Latitude</TableCell>
+                            <TableCell >length</TableCell>
                             <TableCell align="right">Status</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell padding="checkbox">
+                      {listCheckpointExample.map((checkpoint) => {
+                        return (
+                          <TableRow
+                          hover
+                          key={checkpoint.id}
+                          >
+                            {/* <TableCell padding="checkbox">
                                 <Checkbox
                                 color="primary"
                                 value={false}
                                 />
-                            </TableCell>
-                            <TableCell>
+                            </TableCell> */}
+                            <TableCell >
                                 <Typography
                                 variant="body1"
                                 fontWeight="bold"
@@ -178,7 +184,7 @@ function TablePCAdmin() {
                                 gutterBottom
                                 noWrap
                                 >
-                                 Ors
+                                 {checkpoint.id}
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -189,21 +195,7 @@ function TablePCAdmin() {
                                 gutterBottom
                                 noWrap
                                 >
-                                1
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                variant="body1"
-                                fontWeight="bold"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                                >
-                                Name
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" noWrap>
-                                fas
+                                {checkpoint.name}
                                 </Typography>
                             </TableCell>
                             <TableCell align="right">
@@ -214,17 +206,29 @@ function TablePCAdmin() {
                                 gutterBottom
                                 noWrap
                                 >
-                                31323132
+                                {checkpoint.latitude}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" noWrap>
-                                {/* {numeral(50).format(
-                                    `${54}0,0.00`
-                                )} */}
+                                punto X
+                                </Typography>
+                            </TableCell>
+                            <TableCell >
+                                <Typography
+                                variant="body1"
+                                fontWeight="bold"
+                                color="text.primary"
+                                gutterBottom
+                                noWrap
+                                >
+                                {checkpoint.length}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" noWrap>
+                                punto Y
                                 </Typography>
                             </TableCell>
                             <TableCell align="right">
                                 {/* {getStatusLabel(cryptoOrder.status)} */}
-                                Completed
+                                {checkpoint.checkpointType?.name? checkpoint.checkpointType.name: 'Completado'}
                             </TableCell>
                             <TableCell align="right">
                                 <Tooltip title="Edit Order" arrow>
@@ -254,7 +258,9 @@ function TablePCAdmin() {
                                 </IconButton>
                                 </Tooltip>
                             </TableCell>
-                        </TableRow>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                 </Table>
             </TableContainer>

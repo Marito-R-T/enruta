@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
@@ -83,7 +84,7 @@ function RouteDetails() {
       <Container maxWidth="lg">
         {/* <div>{product.name}</div> */}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
