@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import {Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, Input, TextField, ThemeProvider, Typography, createTheme, styled, useTheme} from '@mui/material';
+import {Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, IconButton, Input, InputAdornment, TextField, ThemeProvider, Typography, createTheme, styled, useTheme} from '@mui/material';
 import Link from 'next/link';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { postRegisterClient } from '../../services/AuthenticationServices/api';
 
 export default function SignIn() {
   const theme = useTheme();
+  const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = useState({
     email: '',
     nit: '',
@@ -25,6 +28,8 @@ export default function SignIn() {
     password: false
   });
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
   // const validatePhoneNumber = () => {
   //   const phoneRegex = /^\d{10}$/; // Expresión regular para 10 dígitos numéricos
   //   return phoneRegex.test(formData.age);
@@ -40,19 +45,21 @@ export default function SignIn() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formData);
+    // console.log(formData);
     
     // Realizar validaciones adicionales y enviar el formulario si no hay errores
     if (formData.email && formData.nit && formData.fullname && formData.numberPhone && formData.username && formData.age && formData.password) {
       try {
-        // const response = await postLogin({});
+        const response = await postRegisterClient(formData);
+        console.log(response);
+        
       } catch (error) {
-        console.error(error);
+        console.error('Error',error);
         
       }
       console.log('Formulario enviado');
       // Reiniciar el estado y los campos del formulario
-      setFormData({ email: '', nit: '', fullname: '', username: '', numberPhone: '', age: null, address: '', password: '' });
+      // setFormData({ email: '', nit: '', fullname: '', username: '', numberPhone: '', age: null, address: '', password: '' });
       setErrors({ email: false, nit: false, fullname: false, username: false, numberPhone: false, age: false, address: false, password: false });
     }
   };
@@ -261,7 +268,7 @@ export default function SignIn() {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="current-password"
                   variant='outlined'
@@ -270,9 +277,18 @@ export default function SignIn() {
                   error={errors.password}
                   helperText={errors.password ? 'Campo requerido' : ''}
                   inputProps= {{
-                    "data-testid": "password"
+                      "data-testid": "password"
                   }}
-                />
+                  InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={handleClickShowPassword} edge="end">
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
               </Box>
             </Grid>
 

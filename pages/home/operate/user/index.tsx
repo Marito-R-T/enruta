@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
@@ -18,6 +20,7 @@ import {
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
 import TaskSearch from '@/content/Home/TaskSearch';
+import FormClientOp from './formClient';
 
 
 function UserOp() {
@@ -61,7 +64,19 @@ function UserOp() {
 
 
       <Container maxWidth="lg">
-
+      <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Grid item xs={12}>
+            <Card>
+              <FormClientOp/>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
       <Footer />
     </>

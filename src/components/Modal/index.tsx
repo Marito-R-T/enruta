@@ -8,8 +8,6 @@ function ModalTemplate(props) {
     const { onClose, selectedValue, open } = props;
 
     const handleClose = () => {
-        console.log(props);
-        
         onClose(selectedValue);
     };
     return (

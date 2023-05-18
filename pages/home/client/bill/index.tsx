@@ -19,6 +19,7 @@ import {
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
 import TaskSearch from '@/content/Home/TaskSearch';
+import TableBill from './tableBill';
 
 
 function BillClient() {
@@ -59,7 +60,20 @@ function BillClient() {
         </Box>
       </PageTitleWrapper>
       <Container maxWidth="lg">
-
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+          padding={2}
+          >
+            <Grid item xs={12} >
+              <Card>
+                <TableBill/>
+              </Card>
+            </Grid>
+          </Grid>
       </Container>
       <Footer />
     </>

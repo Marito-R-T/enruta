@@ -23,15 +23,29 @@ import {
     MenuItem,
     Typography,
     useTheme,
-    CardHeader
+    CardHeader,
+    InputAdornment,
+    Button,
+    styled,
+    OutlinedInput
   } from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { Checkpoint, listCheckpointExample } from '@/models/Checkpoint';
+import ModalEditPC from './modalEditPC';
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+
 
   interface Filters {
     status?: Checkpoint;
   }
+
+  const OutlinedInputWrapper = styled(OutlinedInput)(
+    ({ theme }) => `
+      background-color: ${theme.colors.alpha.white[100]};
+      padding-right: ${theme.spacing(0.7)}
+  `
+  );
 
   const statusOptions = [
     {
@@ -143,6 +157,24 @@ function TablePCAdmin() {
             }   
             />
             <Divider />
+            <FormControl variant="outlined" fullWidth>
+              <OutlinedInputWrapper
+                type="text"
+                placeholder="Search terms here..."
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Button variant="contained" size="small">
+                      Search
+                    </Button>
+                  </InputAdornment>
+                }
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchTwoToneIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <TableContainer>
                 <Table>
                     <TableHead>
@@ -231,20 +263,7 @@ function TablePCAdmin() {
                                 {checkpoint.checkpointType?.name? checkpoint.checkpointType.name: 'Completado'}
                             </TableCell>
                             <TableCell align="right">
-                                <Tooltip title="Edit Order" arrow>
-                                <IconButton
-                                    sx={{
-                                    '&:hover': {
-                                        background: theme.colors.primary.lighter
-                                    },
-                                    color: theme.palette.primary.main
-                                    }}
-                                    color="inherit"
-                                    size="small"
-                                >
-                                    <EditTwoToneIcon fontSize="small" />
-                                </IconButton>
-                                </Tooltip>
+                                <ModalEditPC item={checkpoint}/>
                                 <Tooltip title="Delete Order" arrow>
                                 <IconButton
                                     sx={{

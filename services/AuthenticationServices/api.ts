@@ -10,7 +10,9 @@ const apiConfig: AxiosRequestConfig = {
     headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer your-token', // Encabezado de autorización
+        
     },
+    withCredentials: true,
     // Otros parámetros de configuración
 };
 
@@ -37,9 +39,28 @@ export const postAuthenticate = async (data: any) => {
     }
 }
 
-export const postRegister = async (data: any) => {
+export const postRegisterOp = async (data: any) => {
     try {
         const response = await axios.post('/v1/auth/register', data, apiConfig);
+        console.log('Respuesta:', response.data);
+        return response.data
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
+
+export const postRegisterClient = async (data: any) => {
+    try {
+        console.log(data);
+        // console.log(apiConfig);
+        
+        
+        const response = await axios.post('http://localhost:8080/authentication-service/v1/auth/register', data, 
+        {
+            withCredentials: true,
+
+        });
         console.log('Respuesta:', response.data);
         return response.data
     } catch (error) {

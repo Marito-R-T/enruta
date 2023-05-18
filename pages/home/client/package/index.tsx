@@ -1,3 +1,4 @@
+import React from "react";
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
@@ -18,6 +19,7 @@ import {
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
 import TaskSearch from '@/content/Home/TaskSearch';
+import TableListMyPackageClient from "./myPackages";
 
 
 function PackageClient() {
@@ -58,7 +60,25 @@ function PackageClient() {
         </Box>
       </PageTitleWrapper>
       <Container maxWidth="lg">
-
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+          >
+            <Grid item xs={12}>
+              <Card>
+                {/* Aqui el form de la data del cliente */}
+                {/* <FormClientPkg/> */}
+              </Card>
+              <Card>
+                {/* Aqui la tabla de los paquetes junto con el modal de la info
+                    de paquetes */}
+                <TableListMyPackageClient/>
+              </Card>
+            </Grid>
+          </Grid>
       </Container>
       <Footer />
     </>

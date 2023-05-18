@@ -23,11 +23,16 @@ import {
     MenuItem,
     Typography,
     useTheme,
-    CardHeader
+    CardHeader,
+    styled,
+    OutlinedInput,
+    InputAdornment,
+    Button
   } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { Checkpoint } from '@/models/Checkpoint';
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
   interface Filters {
     status?: Checkpoint;
@@ -52,6 +57,13 @@ import { Checkpoint } from '@/models/Checkpoint';
     }
   ];
 
+
+  const OutlinedInputWrapper = styled(OutlinedInput)(
+    ({ theme }) => `
+      background-color: ${theme.colors.alpha.white[100]};
+      padding-right: ${theme.spacing(0.7)}
+  `
+  );
 
 function TableRoutesAdmin() {
     const theme = useTheme();
@@ -97,6 +109,25 @@ function TableRoutesAdmin() {
                 </Box>
             </CardHeader>
             <Divider />
+            <Box>
+            <FormControl variant="outlined" fullWidth>
+              <OutlinedInputWrapper
+                type="text"
+                placeholder="Search terms here..."
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Button variant="contained" size="small">
+                      Search
+                    </Button>
+                  </InputAdornment>
+                }
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchTwoToneIcon />
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <TableContainer>
                 <Table>
                     <TableHead>
@@ -118,7 +149,10 @@ function TableRoutesAdmin() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
+                        <TableRow
+                        hover
+                        // key={pkgItem.id}
+                        >
                             <TableCell padding="checkbox">
                                 <Checkbox
                                 color="primary"
@@ -213,6 +247,7 @@ function TableRoutesAdmin() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            </Box>
         </Card>
         
     );

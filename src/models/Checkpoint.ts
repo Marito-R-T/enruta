@@ -22,7 +22,7 @@ export interface PackageInformation {
     exitTimestamp: Date;
 }
 
-export const listCheckpointExample: readonly Checkpoint[] = [
+export const listCheckpointExample: Checkpoint[] = [
     {
         id: 1,
         name: "pc1",

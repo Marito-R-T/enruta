@@ -10,11 +10,14 @@ import {
     MenuItem,
     Select,
     Divider,
-    InputAdornment
+    InputAdornment,
+    Tooltip,
+    IconButton,
+    useTheme,
   } from '@mui/material';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
+  import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import ModalTemplate from '@/components/Modal';
-import { CheckpointType } from '@/models/Checkpoint';
+import { Checkpoint, CheckpointType } from '@/models/Checkpoint';
 
 
 const listCheckpointsType: CheckpointType[] = [
@@ -40,13 +43,16 @@ const listCheckpointsType: CheckpointType[] = [
   }
 ];
 
-export default function ModalAddPC() {
+export default function ModalEditPC(props) {
+    const theme = useTheme();
+    const checkpointItem: Checkpoint = props.item;
+    
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-      name: '',
-      checkpointType: '',
-      latitude: '',
-      length: '',
+      name: checkpointItem.name,
+      checkpointType: checkpointItem.checkpointType?.name,
+      latitude: checkpointItem.latitude,
+      length: checkpointItem.length,
       feeType: '',
       amount: 0.00
     });
@@ -58,19 +64,22 @@ export default function ModalAddPC() {
       feeType: false,
       amount: false
     });
-    // const [selectedValue, setSelectedValue] = useState(emails[1]);
+    
+    useEffect(() => {
 
-  useEffect(() => {
-    // Código a ejecutar después de que el componente se monta en el DOM
-    // o cuando ciertas dependencias cambian
-    // Puedes realizar llamadas a API, actualizar el estado, etc.
-    setFormData({ name: '', checkpointType: '', latitude: '', length: '', feeType: '', amount: 0.00 });
-      setErrors({ name: false, checkpointType: false, latitude: false, length: false, feeType: false, amount: false });
-    return () => {
-      // Código para limpiar o cancelar cualquier efecto secundario
-      // antes de que el componente se desmonte
-    };
-  }, [open]);
+        // setFormData({ name: '', checkpointType: '', latitude: '', length: '', feeType: '', amount: 0.00 });
+        // setErrors({ name: false, checkpointType: false, latitude: false, length: false, feeType: false, amount: false });
+        // Llamada a una API
+        try {
+            //Api obtener los datas del Checkpoint
+            // const response = await postLogin({});
+        } catch (error) {
+            console.error(error);
+        
+        }
+
+        return () => { };
+      }, [open]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -112,17 +121,32 @@ export default function ModalAddPC() {
 
     return (
       <>
-        <Button onClick={handleClickOpen}
+        {/* <Button onClick={handleClickOpen}
         sx={{ mt: { xs: 2, md: 0 } }}
         variant="contained"
         startIcon={<AddRoundedIcon fontSize="small" />}
       >
         Crear Punto de Control
-      </Button>
+      </Button> */}
+        <Tooltip title="Edit Order" arrow>
+            <IconButton
+                onClick={handleClickOpen}
+                sx={{
+                '&:hover': {
+                    background: theme.colors.primary.lighter
+                },
+                color: theme.palette.primary.main
+                }}
+                color="inherit"
+                size="small"
+            >
+                <EditTwoToneIcon fontSize="small" />
+            </IconButton>
+        </Tooltip>
       <ModalTemplate 
         open={open}
         onClose={handleClose}
-        title = 'Crear Punto de Control'
+        title = 'Editar Punto de Control'
         >
           <Box component="form" onSubmit={handleSubmit} sx={{ pl: 1, pr: 1 }}>
             <Grid container spacing={1}>
@@ -272,7 +296,7 @@ export default function ModalAddPC() {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                     >
-                      Crear Punto de Control
+                      Actualizar
                     </Button>
                   </Box>
                 </Grid>

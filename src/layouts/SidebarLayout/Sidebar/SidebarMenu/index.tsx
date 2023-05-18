@@ -188,9 +188,10 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        {/* <SidebarClient/> */}
+        
         <SidebarAdmin/>
-        {/* <SidebarOperator/> */}
+        <SidebarOperator/>
+        <SidebarClient/>
         
         
         {/*<List

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChangeEvent, useState } from 'react';
 
 import {
@@ -25,6 +25,10 @@ import {
   import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
   import BusinessCenterTwoToneIcon from '@mui/icons-material/BusinessCenterTwoTone';
   import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { Checkpoint } from '@/models/Checkpoint';
+import RadioButtonCheckedRoundedIcon from '@mui/icons-material/RadioButtonCheckedRounded';
+import GpsNotFixedRoundedIcon from '@mui/icons-material/GpsNotFixedRounded';
+import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 
 
   const TimelineWrapper = styled(Timeline)(
@@ -52,9 +56,29 @@ import {
   `
   );
   
+type ChildComponentProps = {
+  dataCheckRoute: Array<Checkpoint>,
+  onDataDeleteChange(itemId:  number): void
+}
   
-  function RoutePath() {
+  function RoutePath( { dataCheckRoute, onDataDeleteChange }: ChildComponentProps, ) {
     const theme = useTheme();
+
+    const handleChangeDelete = (itemId) => {
+      onDataDeleteChange(itemId);
+    };
+
+    useEffect(() => {
+      // Código a ejecutar después de que el componente se monta en el DOM
+      // o cuando ciertas dependencias cambian
+      // Puedes realizar llamadas a API, actualizar el estado, etc.
+      console.log(dataCheckRoute);
+      
+      return () => {
+        // Código para limpiar o cancelar cualquier efecto secundario
+        // antes de que el componente se desmonte
+      };
+    }, [dataCheckRoute]);
 
     return (
       <Box>
@@ -81,36 +105,58 @@ import {
                     },
                 }}
                 >
-                <TimelineItem>
-                    {/* <TimelineOppositeContent
-                    sx={{ m: '0 0' }}
-                    align="right"
-                    variant="body2"
-                    color="text.secondary"
+              { dataCheckRoute.map((itemCP) =>{
+                return(
+                  <>
+                  <TimelineItem>
+                        {/* <TimelineOppositeContent
+                        sx={{ m: '0 0' }}
+                        align="right"
+                        variant="body2"
+                        color="text.secondary"
+                        >
+                        9:30 am
+                        </TimelineOppositeContent> */}
+                    <TimelineSeparator>
+                    <TimelineDot color="primary">
+                        <RadioButtonCheckedRoundedIcon />
+                    </TimelineDot>
+                    <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent>
+                    <Typography
+                        variant="h4"
+                        sx={{
+                        pb: 2
+                        }}
                     >
-                    9:30 am
-                    </TimelineOppositeContent> */}
-                <TimelineSeparator>
-                <TimelineDot color="success">
-                    <AssignmentTwoToneIcon />
-                </TimelineDot>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                <Typography
-                    variant="h4"
-                    sx={{
-                    pb: 2
-                    }}
-                >
-                    "Bodega/Punto de Salida"
-                </Typography>
-                </TimelineContent >
-            </TimelineItem>
+                        "{itemCP.name}"
+                        <Tooltip title="Quitar Punto" arrow>
+                        <IconButton
+                          onClick={()=>handleChangeDelete(itemCP.id)}
+                            sx={{
+                            '&:hover': {
+                                background: theme.colors.primary.lighter
+                            },
+                            marginLeft: 1,
+                            color: theme.palette.error.main
+                            }}
+                            color="inherit"
+                            size="small"
+                        >
+                            <DeleteTwoToneIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                    </Typography>
+                    </TimelineContent >
+                </TimelineItem>
+                  </>
+                )
+              }) }
             <TimelineItem>
                 <TimelineSeparator>
                 <TimelineDot color="primary">
-                    <AccountTreeTwoToneIcon />
+                    <GpsNotFixedRoundedIcon />
                 </TimelineDot>
                 <TimelineConnector />
                 </TimelineSeparator>
@@ -144,7 +190,7 @@ import {
             <TimelineItem>
                 <TimelineSeparator>
                 <TimelineDot color="primary">
-                    <BusinessCenterTwoToneIcon />
+                    <RadioButtonUncheckedRoundedIcon />
                 </TimelineDot>
                 {/* <TimelineConnector /> */}
                 </TimelineSeparator>

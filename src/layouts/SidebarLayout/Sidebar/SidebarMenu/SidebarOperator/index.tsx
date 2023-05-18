@@ -190,7 +190,7 @@ function SidebarOperator(){
                             </Button>
                             </Link>
                         </ListItem>
-                        <ListItem component="div">
+                        {/* <ListItem component="div">
                             <Link href="/home/operate/package" passHref>
                             <Button
                                 className={
@@ -206,7 +206,7 @@ function SidebarOperator(){
                                 Paquete
                             </Button>
                             </Link>
-                        </ListItem>
+                        </ListItem> */}
                         <ListItem component="div">
                             <Link href="/home/operate/order" passHref>
                             <Button

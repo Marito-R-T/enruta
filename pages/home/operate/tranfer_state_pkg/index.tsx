@@ -1,7 +1,8 @@
+import React from 'react';
+
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
 import Footer from '@/components/Footer';
 import {
   Typography,
@@ -17,21 +18,10 @@ import {
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
-import TaskSearch from '@/content/Home/TaskSearch';
+import TablePkgOp from './tablePkg';
 
 
 function TranferStatePkgOP() {
-
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
-
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
-  };
 
   return (
     <>
@@ -57,11 +47,23 @@ function TranferStatePkgOP() {
             </Box>
         </Box>
       </PageTitleWrapper>
-
+        
 
 
       <Container maxWidth="lg">
-
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Grid item xs={12}>
+            <Card>
+              <TablePkgOp/>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
       <Footer />
     </>

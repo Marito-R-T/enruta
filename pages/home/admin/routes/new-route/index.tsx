@@ -36,22 +36,35 @@ import AddLocationRoundedIcon from '@mui/icons-material/AddLocationRounded';
 import RoutePath from './routepath';
 import FormDataRoute from './formDataRute';
 import SearchPCRoute from './searchPCRoute';
+import { Checkpoint } from '@/models/Checkpoint';
+import { Edge, PathRoute } from '@/models/RouteObj';
 
 
 
 
 function NewRoute() {
   const theme = useTheme();
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
+  //para la consulta de busqueda
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
+  //los que se agregaron a la lista de la ruta
+  const [checkpointsRoute, setCheckpointsRoute] = useState<Checkpoint[]>([]);
+  const [edgesRoute, setEdgesRoute] = useState<Edge[]>([]);
+  const [pathsRoute, setPathsRoute] = useState<PathRoute[]>([]);
 
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
+  
+  //Agrega data al array del use estate
+  const handleClickAddCheckpoint = (checkData: Checkpoint) => {
+    setCheckpointsRoute( (prevDataList) => [...prevDataList, checkData]);
+    // console.log(checkpointsRoute);
+    
   };
+
+  //Un delete para un item del array del useState
+  const handleDeleteItem = (itemId: number) => {
+    const updatedItems = checkpointsRoute.filter((item) => item.id !== itemId);
+    setCheckpointsRoute(updatedItems);
+  };
+
 
   return (
     <>
@@ -91,7 +104,7 @@ function NewRoute() {
             <Card>
                 <Grid item xs={12} md={12} >
                   <CardHeader
-                    title="Recent Orders"
+                    title="Creacion de Ruta"
                     action= {
                       <Box width={150}>
                         <Button>
@@ -114,10 +127,10 @@ function NewRoute() {
                   paddingTop={3}
                   paddingX={1}
                 >
-                    <SearchPCRoute/>
+                    <SearchPCRoute onDataAddChange={handleClickAddCheckpoint} />
                     <Grid item xs={12} md={6}>
                       <Box>
-                        <RoutePath/>
+                        <RoutePath dataCheckRoute={checkpointsRoute} onDataDeleteChange={handleDeleteItem}/>
                       </Box>
                     </Grid>
                 </Grid>

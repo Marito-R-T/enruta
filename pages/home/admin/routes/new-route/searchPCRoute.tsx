@@ -31,6 +31,8 @@ import {
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import AddLocationRoundedIcon from '@mui/icons-material/AddLocationRounded';
+import { PathRoute, Edge, RouteObj, listRouteExp } from '@/models/RouteObj';
+import { Checkpoint, listCheckpointExample } from '@/models/Checkpoint';
 
 
 
@@ -41,8 +43,55 @@ const OutlinedInputWrapper = styled(OutlinedInput)(
   `
   );
 
-export default function SearchPCRoute() {
+  
+
+export default function SearchPCRoute( {onDataAddChange}) {
     const theme = useTheme();
+    //para la consulta de busqueda
+    const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
+    //los que se agregaron a la lista de la ruta
+    const [checkpointsRoute, setCheckpointsRoute] = useState<Checkpoint[]>([]);
+    const [edgesRoute, setEdgesRoute] = useState<Edge[]>([]);
+    const [pathsRoute, setPathsRoute] = useState<PathRoute[]>([]);
+
+
+    let listRoutes: Array<RouteObj> = [];
+    listRoutes = listRouteExp;
+
+    let listCheckpoint: Array<Checkpoint> = [];
+    listCheckpoint = listCheckpointExample;
+
+    //Para editar un dato del objeto del array
+    const handleEditItem = (itemId: number, newName: string) => {
+      setCheckpointsRoute((prevItems) =>
+        prevItems.map((item) =>
+          item.id === itemId ? { ...item, name: newName } : item
+        )
+      );
+    };
+
+    //Busca el item para regresarlo
+    const getItemById = (itemId: number) => {
+      return checkpointsRoute.find((item) => item.id === itemId);
+    };
+  
+    //Muestra la accion de obtener el item
+    const handleGetItem = (itemId: number) => {
+      const item = getItemById(itemId);
+      if (item) {
+        console.log(item);
+      } else {
+        console.log("Item not found");
+      }
+    };
+
+
+    const handleChangeAdd = (data) => {
+      // const newData = event.target.value;
+      // console.log(data);
+      
+      onDataAddChange(data);
+    };
 
 
     return(
@@ -89,60 +138,69 @@ export default function SearchPCRoute() {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                <TableRow>
-                                  <TableCell>
-                                    <Typography
-                                    variant="body1"
-                                    fontWeight="bold"
-                                    color="text.primary"
-                                    gutterBottom
-                                    noWrap
+                                { listCheckpoint.map( (checkpointItem) => {
+                                  return(
+                                    <TableRow
+                                    hover
+                                    key={checkpointItem.id}
                                     >
-                                    1
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell>
-                                    <Typography
-                                    variant="body1"
-                                    fontWeight="bold"
-                                    color="text.primary"
-                                    gutterBottom
-                                    noWrap
-                                    >
-                                    Name
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" noWrap>
-                                    (1541 , 55464)
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell align="right">
-                                    <Typography
-                                    variant="body1"
-                                    fontWeight="bold"
-                                    color="text.primary"
-                                    gutterBottom
-                                    noWrap
-                                    >
-                                    Bodega
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell align="right">
-                                    <Tooltip title="Agregar Punto" arrow>
-                                      <IconButton
-                                          sx={{
-                                          '&:hover': {
-                                              background: theme.colors.primary.lighter
-                                          },
-                                          color: theme.palette.success.main
-                                          }}
-                                          color="inherit"
-                                          size="small"
-                                      >
-                                          <AddLocationRoundedIcon fontSize="small" />
-                                      </IconButton>
-                                    </Tooltip>
-                            </TableCell>
-                                </TableRow>
+                                      <TableCell>
+                                        <Typography
+                                        variant="body1"
+                                        fontWeight="bold"
+                                        color="text.primary"
+                                        gutterBottom
+                                        noWrap
+                                        >
+                                        {checkpointItem.id}
+                                        </Typography>
+                                      </TableCell>
+                                      <TableCell>
+                                        <Typography
+                                        variant="body1"
+                                        fontWeight="bold"
+                                        color="text.primary"
+                                        gutterBottom
+                                        noWrap
+                                        >
+                                        {checkpointItem.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" noWrap>
+                                        ({checkpointItem.latitude} , {checkpointItem.length})
+                                        </Typography>
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        <Typography
+                                        variant="body1"
+                                        fontWeight="bold"
+                                        color="text.primary"
+                                        gutterBottom
+                                        noWrap
+                                        >
+                                        Bodega
+                                        </Typography>
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        <Tooltip title="Agregar Punto" arrow>
+                                          <IconButton
+                                              onClickCapture={() =>handleChangeAdd(checkpointItem)}
+                                              sx={{
+                                              '&:hover': {
+                                                  background: theme.colors.primary.lighter
+                                              },
+                                              color: theme.palette.success.main
+                                              }}
+                                              color="inherit"
+                                              size="small"
+                                          >
+                                              <AddLocationRoundedIcon fontSize="small" />
+                                          </IconButton>
+                                        </Tooltip>
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                                
                               </TableBody>
                             </Table>
                           </TableContainer>
