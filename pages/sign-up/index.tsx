@@ -8,14 +8,14 @@ export default function SignIn() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    nit: '',
-    fullname: '',
-    username: '',
-    numberPhone: '',
-    age: 1,
-    address: '',
-    password: ''
+    email: 'example@gmail.com',
+    nit: '1111222233',
+    fullname: 'Yefer Alvarado',
+    username: 'yefer',
+    numberPhone: '11221122',
+    age: 25,
+    address: 'Guatemala',
+    password: '12345678'
   });
   const [errors, setErrors] = useState({
     email: false,
@@ -57,7 +57,7 @@ export default function SignIn() {
         console.error('Error',error);
         
       }
-      console.log('Formulario enviado');
+      // console.log('Formulario enviado');
       // Reiniciar el estado y los campos del formulario
       // setFormData({ email: '', nit: '', fullname: '', username: '', numberPhone: '', age: null, address: '', password: '' });
       setErrors({ email: false, nit: false, fullname: false, username: false, numberPhone: false, age: false, address: false, password: false });

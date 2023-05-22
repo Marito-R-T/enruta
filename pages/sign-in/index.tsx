@@ -3,13 +3,13 @@ import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typograp
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { postLogin } from '../../services/AuthenticationServices/api';
+import { postAuthenticate, postLogin } from '../../services/AuthenticationServices/api';
 
 export default function SignIn() {
     const theme = useTheme();
     const [formData, setFormData] = useState({
-      username: '',
-      password: '',
+      username: 'ADMIN',
+      password: 'admin',
     });
     const [errors, setErrors] = useState({
       username: false,
@@ -30,7 +30,10 @@ export default function SignIn() {
       // Realizar validaciones adicionales y enviar el formulario si no hay errores
       if (formData.username && formData.password) {
         try {
-          // const response = await postLogin({});
+          console.log(formData);
+          
+          const response = await postAuthenticate(formData);
+          console.log(response);
         } catch (error) {
           console.error(error);
           
