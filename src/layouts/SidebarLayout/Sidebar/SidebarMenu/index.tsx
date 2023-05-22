@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/router';
 
@@ -166,6 +166,27 @@ function SidebarMenu() {
   const router = useRouter();
   const currentRoute = router.pathname;
 
+  const [role , setRole] = useState<string>('ALL');
+  
+  const isCompAdmin = () => {
+    if (role=='ADMIN' || role == 'ALL') {
+      return (<SidebarAdmin/>);
+    }
+    return (<></>);
+  }
+  const isCompOperator = () => {
+    if (role=='OPERATOR' || role == 'ALL') {
+      return (<SidebarOperator/>);
+    }
+    return (<></>);
+  }
+  const isCompClient = () => {
+    if (role=='CLIENT' || role == 'ALL') {
+      return (<SidebarClient/>);
+    }
+    return (<></>);
+  }
+
   return (
     <>
       <MenuWrapper>
@@ -174,7 +195,7 @@ function SidebarMenu() {
             <List component="div">
               <ListItem component="div">
                 <Link href="/home" passHref>
-                  <Button
+                  {/* <Button
                     className={currentRoute === '="/' ? 'active' : ''}
                     disableRipple
                     component="p"
@@ -182,235 +203,18 @@ function SidebarMenu() {
                     startIcon={<DesignServicesTwoToneIcon />}
                   >
                     Overview
-                  </Button>
+                  </Button> */}
                 </Link>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
-        
-        <SidebarAdmin/>
+        {isCompAdmin()}
+        {isCompOperator()}
+        {isCompClient()}
+        {/* <SidebarAdmin/>
         <SidebarOperator/>
-        <SidebarClient/>
-        
-        
-        {/*<List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Components
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Link href="/components/buttons" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/buttons' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<BallotTwoToneIcon />}
-                  >
-                    Buttons
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/modals" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/modals' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<BeachAccessTwoToneIcon />}
-                  >
-                    Modals
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/accordions" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/accordions' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<EmojiEventsTwoToneIcon />}
-                  >
-                    Accordions
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/tabs" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/tabs' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<FilterVintageTwoToneIcon />}
-                  >
-                    Tabs
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/badges" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/badges' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<HowToVoteTwoToneIcon />}
-                  >
-                    Badges
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/tooltips" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/tooltips' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<LocalPharmacyTwoToneIcon />}
-                  >
-                    Tooltips
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/avatars" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/avatars' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<RedeemTwoToneIcon />}
-                  >
-                    Avatars
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/cards" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/cards' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<SettingsTwoToneIcon />}
-                  >
-                    Cards
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/components/forms" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/components/forms' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<TrafficTwoToneIcon />}
-                  >
-                    Forms
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Extra Pages
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Link href="/status/404" passHref>
-                  <Button
-                    className={currentRoute === '/status/404' ? 'active' : ''}
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<CheckBoxTwoToneIcon />}
-                  >
-                    Error 404
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/status/500" passHref>
-                  <Button
-                    className={currentRoute === '/status/500' ? 'active' : ''}
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<CameraFrontTwoToneIcon />}
-                  >
-                    Error 500
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/status/coming-soon" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/status/coming-soon' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<ChromeReaderModeTwoToneIcon />}
-                  >
-                    Coming Soon
-                  </Button>
-                </Link>
-              </ListItem>
-              <ListItem component="div">
-                <Link href="/status/maintenance" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/status/maintenance' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="p"
-                    onClick={closeSidebar}
-                    startIcon={<WorkspacePremiumTwoToneIcon />}
-                  >
-                    Maintenance
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-                  </List>*/}
+        <SidebarClient/> */}
       </MenuWrapper>
     </>
   );

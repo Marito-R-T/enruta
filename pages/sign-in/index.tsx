@@ -3,7 +3,7 @@ import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typograp
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { postAuthenticate, postLogin } from '../../services/AuthenticationServices/api';
+import { postAuthenticate } from '../../services/AuthenticationServices/api';
 
 export default function SignIn() {
     const theme = useTheme();
@@ -31,7 +31,6 @@ export default function SignIn() {
       if (formData.username && formData.password) {
         try {
           console.log(formData);
-          
           const response = await postAuthenticate(formData);
           console.log(response);
         } catch (error) {

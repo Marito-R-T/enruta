@@ -26,9 +26,19 @@ export const signinApi =async (data: any) => {
     }
 }
 
+
+//http://localhost:3000/sign-in
+//Login
 export const postAuthenticate = async (data: any) => {
     try {
-        const response = await axios.post('/v1/auth/authenticate', data, apiConfig);
+        const response = await axios.post('/v1/auth/authenticate', data, {
+            baseURL: URL_API,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
+        
         console.log('Respuesta:', response.data);
         return response.data
     } catch (error) {
@@ -39,6 +49,8 @@ export const postAuthenticate = async (data: any) => {
     }
 }
 
+
+//Cuando el operador es que registra directamente
 export const postRegisterOp = async (data: any) => {
     try {
         const response = await axios.post('/v1/auth/register', data, apiConfig);
@@ -50,6 +62,8 @@ export const postRegisterOp = async (data: any) => {
     }
 }
 
+//http://localhost:3000/sign-up
+//Registro para el cliente donde solo el se registra asi mismo
 export const postRegisterClient = async (data: any) => {
     try {
         console.log(data);
@@ -69,16 +83,11 @@ export const postRegisterClient = async (data: any) => {
     }
 }
 
-export const postLogin = async (data: any) => {
-    try {
-        const response = await axios.post('/v1/auth/login', data, apiConfig);
-        console.log('Respuesta:', response.data);
-        return response.data
-    } catch (error) {
-        console.error('Error:', error);
-        throw new Error('Error al enviar la solicitud POST');
-    }
-}
+
+
+
+
+
 
 // Agregar un interceptor para manejar errores de respuesta
 // postAuthenticate.interceptors.response.use(

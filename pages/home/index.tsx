@@ -118,6 +118,8 @@ function HomeTasks() {
 
   getApi();
 
+  //Un redirect para que se vaya a administracion o algo diferente
+
   return (
     <>
       <Head>
@@ -127,52 +129,7 @@ function HomeTasks() {
         <PageHeader />
       </PageTitleWrapper>
       <Container maxWidth="lg">
-        <TabsContainerWrapper>
-          <Tabs
-            onChange={handleTabsChange}
-            value={currentTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            textColor="primary"
-            indicatorColor="primary"
-          >
-            {tabs.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
-            ))}
-          </Tabs>
-        </TabsContainerWrapper>
-        <Card variant="outlined">
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="stretch"
-            spacing={0}
-          >
-            {currentTab === 'analytics' && (
-              <>
-                <Grid item xs={12}>
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                </Grid>
-              </>
-            )}
-            {currentTab === 'taskSearch' && (
-              <Grid item xs={12}>
-                <Box p={4}>
-                  {/*<TaskSearch />*/}
-                </Box>
-              </Grid>
-            )}
-          </Grid>
-        </Card>
+        
       </Container>
       <Footer />
     </>

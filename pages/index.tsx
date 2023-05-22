@@ -21,6 +21,10 @@ import Head from 'next/head';
 import Logo from '@/components/LogoSign';
 import Hero from '@/content/Overview/Hero';
 
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
   width: 100%;
@@ -98,19 +102,29 @@ Overview.getLayout = function getLayout(page: ReactElement) {
 const Home: NextPage = () => {
   const authState = useSelector(selectAuthState);
   const dispatch = useDispatch();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/sign-in');
+  }, []);
+
   return (
-    <div>
-      <div>{authState ? "Logged in" : "Not Logged In"}</div>
-      <button
-        onClick={() =>
-          authState
-            ? dispatch(setAuthState(false))
-            : dispatch(setAuthState(true))
-        }
-      >
-        {authState ? "Logout" : "LogIn"}
-      </button>
-    </div>
+    <>
+      
+    </>
+    // <div>
+    //   <div>{authState ? "Logged in" : "Not Logged In"}</div>
+    //   <button
+    //     onClick={() =>
+    //       authState
+    //         ? dispatch(setAuthState(false))
+    //         : dispatch(setAuthState(true))
+    //     }
+    //   >
+    //     {authState ? "Logout" : "LogIn"}
+    //   </button>
+    // </div>
   );
 };
 
