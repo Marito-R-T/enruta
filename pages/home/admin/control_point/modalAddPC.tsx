@@ -5,10 +5,7 @@ import {
     Button,
     Grid,
     TextField,
-    FormControl,
-    InputLabel,
     MenuItem,
-    Select,
     Divider,
     InputAdornment
   } from '@mui/material';
@@ -76,9 +73,8 @@ export default function ModalAddPC() {
     setOpen(true);
   };
 
-  const handleClose = (value) => {
+  const handleClose = () => {
     setOpen(false);
-    // setSelectedValue(value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

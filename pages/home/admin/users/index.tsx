@@ -2,19 +2,13 @@ import React from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
-import Footer from '@/components/Footer';
 import {
     Typography,
   Grid,
-  Tab,
-  Tabs,
   Divider,
   Container,
   Card,
   Box,
-  useTheme,
-  styled,
   CardHeader,
   FormControl,
   InputLabel,
@@ -23,36 +17,16 @@ import {
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 
-import TaskSearch from '@/content/Home/TaskSearch';
 import TableUser from './TableUsers';
-import SearchUser from './SearchUser';
-import { Role, User, UserRoleStatus, listRolesExp } from '@/models/User';
+import { UserRoleStatus, listRolesExp } from '@/models/User';
 
 interface Filters {
   status?: UserRoleStatus;
 }
 const statusOptions = [{id: 0, name: 'All'},...listRolesExp];
 
-const applyFilters = (
-  listUser: User[],
-  filters: Filters
-): User[] => {
-  return listUser.filter((userItem) => {
-    let matches = true;
-
-    if (filters.status && userItem.role.name !== filters.status) {
-      matches = false;
-    }
-
-    return matches;
-  });
-};
-
 function UsersAdmin() {
   statusOptions.push();
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
@@ -68,10 +42,6 @@ function UsersAdmin() {
       ...prevFilters,
       status: value
     }));
-  };
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
   };
 
   return (
@@ -141,7 +111,7 @@ function UsersAdmin() {
                   paddingTop={3}
                   paddingX={1}
                   >
-                    <SearchUser/>
+                    {/* <SearchUser/> */}
                     <TableUser/>
                   </Grid>
                   

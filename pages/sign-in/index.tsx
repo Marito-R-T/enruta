@@ -38,7 +38,7 @@ export default function SignIn() {
       if (formData.username && formData.password) {
         try {
           console.log(formData);
-          const response = await postAuthenticate(formData);
+          const response: any = await postAuthenticate(formData);
           
           console.log(response);
           handleAuthentication(response.token);

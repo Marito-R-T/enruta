@@ -5,7 +5,7 @@ import { RootState } from '../../auth/Store';
 
 const URL_API = GLOBAL.URL_API+"/authentication-service";
 
-let apiConfig: AxiosRequestConfig = {
+const apiConfig: AxiosRequestConfig = {
     baseURL: URL_API,
     // timeout: 5000, // Tiempo máximo de espera para la respuesta en milisegundos
     headers: {
@@ -27,10 +27,6 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// const setAuth = (token) => {
-    
-// }
-
 export const signinApi =async (data: any) => {
     try {
         const response = await axios.post('https://api.example.com/data', data,{
@@ -40,7 +36,7 @@ export const signinApi =async (data: any) => {
             },
             withCredentials: true,
         });
-        return response.data
+        return response
     } catch (error) {
         console.error('Error al obtener los datos:', error);
         throw error;
@@ -60,7 +56,7 @@ export const postAuthenticate = async (data: any) => {
             withCredentials: true,
         });
         console.log('Respuesta:', response.data);
-        return response.data
+        return response
     } catch (error) {
         // console.error('Error al obtener los datos:', error);
         // throw error;
@@ -74,8 +70,8 @@ export const postAuthenticate = async (data: any) => {
 export const postRegisterOp = async (data: any) => {
     try {
         const response = await api.post('/v1/auth/registerop', data);
-        console.log('Respuesta:', response.data);
-        return response.data
+        console.log('Respuesta:', response);
+        return response
     } catch (error) {
         console.error('Error:', error);
         throw new Error('Error al enviar la solicitud POST');
@@ -95,16 +91,57 @@ export const postRegisterClient = async (data: any) => {
             },
             withCredentials: true,
         });
-        console.log('Respuesta:', response.data);
-        return response.data
+        console.log('Respuesta:', response);
+        return response
     } catch (error) {
         console.error('Error:', error);
         throw new Error('Error al enviar la solicitud POST');
     }
 }
 
+export const putUsers = async (data: any) => {
+    try {
+        const response = await api.put('/v1/users/', data);
+        console.log('Respuesta:', response);
+        return response
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
 
+export const deleteUsersId = async (id: any) => {
+    try {
+        const response = await api.delete(`/v1/users/${id}`);
+        console.log('Respuesta:', response);
+        return response
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
 
+export const getUsersId = async (id: any) => {
+    try {
+        const response = await api.get(`/v1/users/${id}`);
+        console.log('Respuesta:', response);
+        return response
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
+
+export const getListUsersId = async (pattern: string, page: number, size: number) => {
+    try {
+        const response: any = await api.get(`/v1/users/?pattern=${pattern}&page=${page}&size=${size}`);
+        console.log('Respuesta:', response);
+        return response
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
 
 
 

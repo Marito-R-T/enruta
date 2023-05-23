@@ -100,8 +100,8 @@ Overview.getLayout = function getLayout(page: ReactElement) {
 
 
 const Home: NextPage = () => {
-  const authState = useSelector(selectAuthState);
-  const dispatch = useDispatch();
+  // const authState = useSelector(selectAuthState);
+  // const dispatch = useDispatch();
 
   const router = useRouter();
 

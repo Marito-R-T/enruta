@@ -3,9 +3,8 @@ import React from 'react';
 import NextLink from 'next/link';
 
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setToken, setIsAuthenticated } from '../../../../../auth/authReducer';
-import { RootState } from '../../../../../auth/Store';
 
 import {
   Avatar,

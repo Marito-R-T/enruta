@@ -10,11 +10,11 @@ import { Box,
 import React, { ChangeEvent, useState } from 'react';
 
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone'
-import AddLocationRoundedIcon from '@mui/icons-material/AddLocationRounded';
-import { Role, User, UserRoleStatus, listUserExp } from '@/models/User';
+import { Role, User } from '@/models/User';
 import Label from '@/components/Label';
+import ModalEditRole from './ModalEditRole';
+import { deleteUsersId, getListUsersId } from '../../../../services/AuthenticationServices/api';
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
     ({ theme }) => `
@@ -22,10 +22,6 @@ const OutlinedInputWrapper = styled(OutlinedInput)(
       padding-right: ${theme.spacing(0.7)}
   `
 );
-
-interface Filters {
-    status?: UserRoleStatus;
-  }
 
 const getStatusLabel = (userRoleStatus: Role): JSX.Element => {
     console.log('asdfasd',userRoleStatus);
@@ -50,40 +46,57 @@ const getStatusLabel = (userRoleStatus: Role): JSX.Element => {
     return <Label color={color}>{text}</Label>;
   };
 
-let listUser: Array<User> = [];
-
 function TableUser () {
-
+    const theme = useTheme();
+    const [listUser, setListUser] = useState<User[]>([]);
     const [page, setPage] = useState<number>(0);
     const [limit, setLimit] = useState<number>(5);
-    const [filters, setFilters] = useState<Filters>({
-        status: null
-    });
+    const [search, setSearch] = useState<string>(undefined);
 
-    const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        let value = null;
-    
-        if (e.target.value !== 'all') {
-          value = e.target.value;
-        }
-    
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          status: value
-        }));
-    };
+    const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+        console.log(event.target.value);
+        
+    }
 
     const handlePageChange = (_event: any, newPage: number): void => {
         setPage(newPage);
+        getSearchUser(search, page, limit);
       };
     
     const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
         setLimit(parseInt(event.target.value));
+        getSearchUser(search, 1, limit);
     };
+
+    const handleSubmitSearch = async () => {
+        await getSearchUser(search, 1, limit);
+    }
+
+    const handleDeleteUser = async (idUser) => {
+        try {
+            const response = await deleteUsersId(idUser);
+            console.log(response);
+            await getSearchUser(search, page, limit);
+        } catch (error) {  
+            console.error(error);
+            
+        }
+    }
+
+    const getSearchUser = async (pattern: string, page: number, size: number) => {
+        try {
+            const response = await getListUsersId(pattern, page, size);
+            setListUser(response);
+            
+        } catch (error) {  
+            console.error(error);
+            
+        }
+    }
     
-    const theme = useTheme();
-    listUser = listUserExp;
-    console.log(listUser);
+    
+    // listUser = listUserExp;
     
     return (
         <Grid item xs={12} md={12}>
@@ -92,9 +105,14 @@ function TableUser () {
                 <OutlinedInputWrapper
                 type="text"
                 placeholder="Username Usuario..."
+                onChange={onChangeSearch}
+                
+                value={search}
                 endAdornment={
                     <InputAdornment position="end">
-                    <Button variant="contained" size="small">
+                    <Button variant="contained" size="small"
+                    onClick={handleSubmitSearch}
+                    >
                         Buscar Usuario
                     </Button>
                     </InputAdornment>
@@ -169,22 +187,10 @@ function TableUser () {
 
 
                                 <TableCell align="right">
-                                    <Tooltip title="Edit Order" arrow>
-                                    <IconButton
-                                        sx={{
-                                        '&:hover': {
-                                            background: theme.colors.primary.lighter
-                                        },
-                                        color: theme.palette.primary.main
-                                        }}
-                                        color="inherit"
-                                        size="small"
-                                    >
-                                        <EditTwoToneIcon fontSize="small" />
-                                    </IconButton>
-                                    </Tooltip>
+                                    <ModalEditRole idUser={item.id}/>
                                     <Tooltip title="Delete Order" arrow>
                                     <IconButton
+                                        onClick={() => handleDeleteUser(item.id)}
                                         sx={{
                                         '&:hover': { background: theme.colors.error.lighter },
                                         color: theme.palette.error.main

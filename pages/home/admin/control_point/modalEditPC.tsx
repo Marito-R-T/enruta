@@ -5,10 +5,7 @@ import {
     Button,
     Grid,
     TextField,
-    FormControl,
-    InputLabel,
     MenuItem,
-    Select,
     Divider,
     InputAdornment,
     Tooltip,
@@ -85,9 +82,8 @@ export default function ModalEditPC(props) {
     setOpen(true);
   };
 
-  const handleClose = (value) => {
+  const handleClose = () => {
     setOpen(false);
-    // setSelectedValue(value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
