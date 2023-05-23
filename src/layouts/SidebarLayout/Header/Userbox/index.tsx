@@ -2,6 +2,11 @@ import { useRef, useState } from 'react';
 import React from 'react';
 import NextLink from 'next/link';
 
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, setIsAuthenticated } from '../../../../../auth/authReducer';
+import { RootState } from '../../../../../auth/Store';
+
 import {
   Avatar,
   Box,
@@ -59,6 +64,10 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const user = {
     name: 'Catherine Pike',
     avatar: '/static/images/avatars/1.jpg',
@@ -74,6 +83,14 @@ function HeaderUserbox() {
 
   const handleClose = (): void => {
     setOpen(false);
+  };
+
+  const handleLogOut = () => {
+    // Realiza la autenticación y obtén el token
+
+    dispatch(setToken(null));
+    dispatch(setIsAuthenticated(false));
+    router.push('/sign-in');
   };
 
   return (
@@ -131,7 +148,7 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={handleLogOut}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

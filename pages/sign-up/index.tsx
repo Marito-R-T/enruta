@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, IconButton, Input, InputAdornment, TextField, ThemeProvider, Typography, createTheme, styled, useTheme} from '@mui/material';
+import {Avatar, Box, Button, Container, Grid, IconButton, InputAdornment, TextField, ThemeProvider, Typography, useTheme} from '@mui/material';
 import Link from 'next/link';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { postRegisterClient } from '../../services/AuthenticationServices/api';

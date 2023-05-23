@@ -1,11 +1,18 @@
 
 import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typography, useTheme} from '@mui/material';
-import axios from 'axios';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { postAuthenticate } from '../../services/AuthenticationServices/api';
 
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, setIsAuthenticated } from '../../auth/authReducer';
+import { RootState } from '../../auth/Store';
+
 export default function SignIn() {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
     const theme = useTheme();
     const [formData, setFormData] = useState({
       username: 'ADMIN',
@@ -32,7 +39,9 @@ export default function SignIn() {
         try {
           console.log(formData);
           const response = await postAuthenticate(formData);
+          
           console.log(response);
+          handleAuthentication(response.token);
         } catch (error) {
           console.error(error);
           
@@ -42,6 +51,19 @@ export default function SignIn() {
         setFormData({ username: '', password: '' });
         setErrors({ username: false, password: false });
       }
+    };
+
+    useEffect(() => {
+      if (isAuthenticated) {
+        router.push('/home');
+      }
+    }, [isAuthenticated, router]);
+
+    const handleAuthentication = (token) => {
+      // Realiza la autenticación y obtén el token
+  
+      dispatch(setToken(token));
+      dispatch(setIsAuthenticated(true));
     };
   
     return (
@@ -123,9 +145,3 @@ export default function SignIn() {
       </ThemeProvider>
     );
   }
-
-
-async function getApi() {
-  const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-  console.log(response);
-}

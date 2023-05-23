@@ -20,6 +20,7 @@ import PageTitleWrapper from '@/components/PageTitleWrapper';
 import TaskSearch from '@/content/Home/TaskSearch';
 
 import axios from 'axios';
+import ProtectedRoute from '../ProtectedRoute';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -121,7 +122,7 @@ function HomeTasks() {
   //Un redirect para que se vaya a administracion o algo diferente
 
   return (
-    <>
+    <ProtectedRoute>
       <Head>
         <title>Home</title>
       </Head>
@@ -132,7 +133,7 @@ function HomeTasks() {
         
       </Container>
       <Footer />
-    </>
+    </ProtectedRoute>
   );
 }
 

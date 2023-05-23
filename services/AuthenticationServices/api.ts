@@ -1,24 +1,45 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { GLOBAL } from '../Global';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../auth/Store';
 
 const URL_API = GLOBAL.URL_API+"/authentication-service";
 
-const apiConfig: AxiosRequestConfig = {
+let apiConfig: AxiosRequestConfig = {
     baseURL: URL_API,
     // timeout: 5000, // Tiempo máximo de espera para la respuesta en milisegundos
     headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer your-token', // Encabezado de autorización
+        // Authorization: 'Bearer your-token', // Encabezado de autorización
         
     },
     withCredentials: true,
     // Otros parámetros de configuración
 };
 
+const api = axios.create(apiConfig);
+
+api.interceptors.request.use((config) => {
+    const token = useSelector((state: RootState) => state.auth.token);
+    console.log(token);
+    // config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `${token}`;
+    return config;
+});
+
+// const setAuth = (token) => {
+    
+// }
+
 export const signinApi =async (data: any) => {
     try {
-        const response = await axios.post('https://api.example.com/data', data,);
+        const response = await axios.post('https://api.example.com/data', data,{
+            baseURL: URL_API,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
         return response.data
     } catch (error) {
         console.error('Error al obtener los datos:', error);
@@ -38,7 +59,6 @@ export const postAuthenticate = async (data: any) => {
             },
             withCredentials: true,
         });
-        
         console.log('Respuesta:', response.data);
         return response.data
     } catch (error) {
@@ -53,7 +73,7 @@ export const postAuthenticate = async (data: any) => {
 //Cuando el operador es que registra directamente
 export const postRegisterOp = async (data: any) => {
     try {
-        const response = await axios.post('/v1/auth/register', data, apiConfig);
+        const response = await api.post('/v1/auth/registerop', data);
         console.log('Respuesta:', response.data);
         return response.data
     } catch (error) {
@@ -67,13 +87,13 @@ export const postRegisterOp = async (data: any) => {
 export const postRegisterClient = async (data: any) => {
     try {
         console.log(data);
-        // console.log(apiConfig);
-        
-        
-        const response = await axios.post('http://localhost:8080/authentication-service/v1/auth/register', data, 
-        {
-            withCredentials: true,
 
+        const response = await axios.post('http://localhost:8080/authentication-service/v1/auth/register', data, {
+            baseURL: URL_API,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
         });
         console.log('Respuesta:', response.data);
         return response.data
