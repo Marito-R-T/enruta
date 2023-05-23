@@ -2,7 +2,7 @@
 import {Avatar, Box, Button, Container, Grid, TextField, ThemeProvider, Typography, useTheme} from '@mui/material';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { postAuthenticate } from '../../services/AuthenticationServices/api';
+import { postAuthenticate, signinApi } from '../../services/AuthenticationServices/api';
 
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,10 +38,11 @@ export default function SignIn() {
       if (formData.username && formData.password) {
         try {
           console.log(formData);
-          const response: any = await postAuthenticate(formData);
+          // const response: any = await postAuthenticate(formData);
+          const response: any = await signinApi(formData);
           
-          console.log(response);
-          handleAuthentication(response.token);
+          console.log('Lo que regresa',response);
+          // handleAuthentication(response.token);
         } catch (error) {
           console.error(error);
           

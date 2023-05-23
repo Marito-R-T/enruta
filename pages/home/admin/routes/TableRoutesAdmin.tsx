@@ -1,16 +1,11 @@
 import React from 'react';
-import { FC, ChangeEvent, useState } from 'react';
-import { format } from 'date-fns';
-
-import PropTypes from 'prop-types';
+import { ChangeEvent, useState } from 'react';
 import {
     Tooltip,
     Divider,
     Box,
     FormControl,
-    InputLabel,
     Card,
-    Checkbox,
     IconButton,
     Table,
     TableBody,
@@ -19,8 +14,6 @@ import {
     TablePagination,
     TableRow,
     TableContainer,
-    Select,
-    MenuItem,
     Typography,
     useTheme,
     CardHeader,
@@ -31,31 +24,10 @@ import {
   } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { Checkpoint } from '@/models/Checkpoint';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-
-  interface Filters {
-    status?: Checkpoint;
-  }
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
+import { RouteObj } from '@/models/RouteObj';
+import { deleteRoute, getListRoute } from '../../../../services/RouteServices/api';
+import Label from '@/components/Label';
 
 
   const OutlinedInputWrapper = styled(OutlinedInput)(
@@ -65,47 +37,79 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
   `
   );
 
+  const getStatusLabel = (routeStatus: boolean): JSX.Element => {
+    
+    const map = {
+      Inactive: {
+        text: 'INACTIVO',
+        color: 'secondary'
+      },
+      Active: {
+        text: 'ACTIVO',
+        color: 'success'
+      },
+    };
+    
+    const { text, color }: any = map[routeStatus? 'Active': 'Inactive'];
+  
+    return <Label color={color}>{text}</Label>;
+  };
+
 function TableRoutesAdmin() {
     const theme = useTheme();
-
+    const [listRoutes, setListRoutes] = useState<RouteObj[]>([]);
     const [page, setPage] = useState<number>(0);
     const [limit, setLimit] = useState<number>(5);
-    const [filters, setFilters] = useState<Filters>({
-        status: null
-    });
+    const [search, setSearch] = useState<string>(undefined);
 
-    const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        let value = null;
-    
-        if (e.target.value !== 'all') {
-          value = e.target.value;
-        }
-    
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          status: value
-        }));
+
+    const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+      setSearch(event.target.value);
+      console.log(event.target.value);
+      
+  }
+
+  const handlePageChange = (_event: any, newPage: number): void => {
+      setPage(newPage);
+      getSearchRoute(search, page, limit);
     };
+  
+  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
+      setLimit(parseInt(event.target.value));
+      getSearchRoute(search, 1, limit);
+  };
+
+  const handleSubmitSearch = async () => {
+      await getSearchRoute(search, 1, limit);
+  }
+
+  const handleDeleteRoute = async (idRoute) => {
+      try {
+          const response = await deleteRoute(idRoute);
+          console.log(response);
+          await getSearchRoute(search, page, limit);
+      } catch (error) {  
+          console.error(error);
+          
+      }
+  }
+
+  const getSearchRoute = async (pattern: string, page: number, size: number) => {
+      try {
+          const response = await getListRoute(pattern, page, size);
+          setListRoutes(response);
+          
+      } catch (error) {  
+          console.error(error);
+          
+      }
+  }
 
     return (
         <Card>
             <CardHeader>
                 <Box width={150}>
-                    <FormControl fullWidth variant="outlined">
-                        <InputLabel>Status</InputLabel>
-                        <Select
-                        value={filters.status || 'all'}
-                        onChange={handleStatusChange}
-                        label="Status"
-                        autoWidth
-                        >
-                        {statusOptions.map((statusOption) => (
-                            <MenuItem key={statusOption.id} value={statusOption.id}>
-                            {statusOption.name}
-                            </MenuItem>
-                        ))}
-                        </Select>
-                    </FormControl>
+                    
                 </Box>
             </CardHeader>
             <Divider />
@@ -114,9 +118,12 @@ function TableRoutesAdmin() {
               <OutlinedInputWrapper
                 type="text"
                 placeholder="Search terms here..."
+                onChange={onChangeSearch}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Button variant="contained" size="small">
+                    <Button variant="contained" size="small"
+                    onClick={handleSubmitSearch}
+                    >
                       Search
                     </Button>
                   </InputAdornment>
@@ -132,121 +139,90 @@ function TableRoutesAdmin() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell padding="checkbox">
-                                <Checkbox
-                                color="primary"
-                                // checked={selectedAllCryptoOrders}
-                                // indeterminate={selectedSomeCryptoOrders}
-                                // onChange={handleSelectAllCryptoOrders}
-                                />
-                            </TableCell>
-                            <TableCell>Order Details</TableCell>
-                            <TableCell>Order ID</TableCell>
-                            <TableCell>Source</TableCell>
-                            <TableCell align="right">Amount</TableCell>
-                            <TableCell align="right">Status</TableCell>
+                            <TableCell>ID RUTA</TableCell>
+                            <TableCell>NOMBRE</TableCell>
+                            <TableCell>Descripcion</TableCell>
+                            <TableCell align="right">Estado</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow
-                        hover
-                        // key={pkgItem.id}
-                        >
-                            <TableCell padding="checkbox">
-                                <Checkbox
-                                color="primary"
-                                value={false}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                variant="body1"
-                                fontWeight="bold"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                                >
-                                 Ors
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                variant="body1"
-                                fontWeight="bold"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                                >
-                                1
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                variant="body1"
-                                fontWeight="bold"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                                >
-                                Name
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" noWrap>
-                                fas
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography
-                                variant="body1"
-                                fontWeight="bold"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                                >
-                                31323132
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary" noWrap>
-                                {/* {numeral(50).format(
-                                    `${54}0,0.00`
-                                )} */}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                {/* {getStatusLabel(cryptoOrder.status)} */}
-                                Completed
-                            </TableCell>
-                            <TableCell align="right">
-                                <Tooltip title="Edit Order" arrow>
-                                <IconButton
-                                    sx={{
-                                    '&:hover': {
-                                        background: theme.colors.primary.lighter
-                                    },
-                                    color: theme.palette.primary.main
-                                    }}
-                                    color="inherit"
-                                    size="small"
-                                >
-                                    <EditTwoToneIcon fontSize="small" />
-                                </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Delete Order" arrow>
-                                <IconButton
-                                    sx={{
-                                    '&:hover': { background: theme.colors.error.lighter },
-                                    color: theme.palette.error.main
-                                    }}
-                                    color="inherit"
-                                    size="small"
-                                >
-                                    <DeleteTwoToneIcon fontSize="small" />
-                                </IconButton>
-                                </Tooltip>
-                            </TableCell>
-                        </TableRow>
+                      {
+                        listRoutes.map((item) => {
+                          return(
+                            <TableRow
+                            hover
+                            key={item.id}
+                            >
+                              <TableCell>
+                                  <Typography
+                                  variant="body1"
+                                  fontWeight="bold"
+                                  color="text.primary"
+                                  gutterBottom
+                                  noWrap
+                                  >
+                                    {item.id}
+                                  </Typography>
+                              </TableCell>
+                              <TableCell>
+                                  <Typography
+                                  variant="body1"
+                                  fontWeight="bold"
+                                  color="text.primary"
+                                  gutterBottom
+                                  noWrap
+                                  >
+                                  {item.name}
+                                  </Typography>
+                              </TableCell>
+                              <TableCell>
+                                  <Typography
+                                  variant="body1"
+                                  fontWeight="bold"
+                                  color="text.primary"
+                                  gutterBottom
+                                  noWrap
+                                  >
+                                  {item.description}
+                                  </Typography>
+                              </TableCell>
+                              <TableCell align="right">
+                                  {getStatusLabel(item.state? item.state : false)}
+                              </TableCell>
+                              <TableCell align="right">
+                                  <Tooltip title="Delete Order" arrow>
+                                  <IconButton
+                                    onClick={() => handleDeleteRoute(1)}
+                                      sx={{
+                                      '&:hover': { background: theme.colors.error.lighter },
+                                      color: theme.palette.error.main
+                                      }}
+                                      color="inherit"
+                                      size="small"
+                                  >
+                                      <DeleteTwoToneIcon fontSize="small" />
+                                  </IconButton>
+                                  </Tooltip>
+                              </TableCell>
+                          </TableRow>
+                          );
+                        })
+                      }
                     </TableBody>
                 </Table>
             </TableContainer>
+              <Box p={2}>
+                  <TablePagination
+                  component="div"
+                  count={35}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleLimitChange}
+                  page={page}
+                  rowsPerPage={limit}
+                  rowsPerPageOptions={[5, 10, 25, 30]}
+                  />
+              </Box>
             </Box>
         </Card>
         

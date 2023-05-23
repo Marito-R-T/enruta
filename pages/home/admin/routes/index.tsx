@@ -2,20 +2,11 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
-import Footer from '@/components/Footer';
 import {
     Typography,
   Grid,
-  Tab,
-  Tabs,
-  Divider,
   Container,
   Card,
-  Box,
-  useTheme,
-  styled,
   Button
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
@@ -25,18 +16,6 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 
 function RutesAdmin() {
-
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
-
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
-  };
-
   return (
     <>
       <Head>

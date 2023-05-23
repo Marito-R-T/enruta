@@ -23,7 +23,7 @@ api.interceptors.request.use((config) => {
 
 export const postCheckpoint = async (data: any) => {
     try {
-        const response = await api.post(`/v1/checkpoints`, data);
+        const response: any = await api.post(`/v1/checkpoints`, data);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud POST');
@@ -32,7 +32,7 @@ export const postCheckpoint = async (data: any) => {
 
 export const putCheckpoint = async (data: any) => {
     try {
-        const response = await api.put(`/v1/checkpoints`, data);
+        const response: any = await api.put(`/v1/checkpoints`, data);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud PUT');
@@ -41,7 +41,7 @@ export const putCheckpoint = async (data: any) => {
 
 export const deleteCheckpoint = async (id: any) => {
     try {
-        const response = await api.delete(`/v1/checkpoints/${id}`);
+        const response: any = await api.delete(`/v1/checkpoints/${id}`);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud DELETE');
@@ -50,7 +50,7 @@ export const deleteCheckpoint = async (id: any) => {
 
 export const getCheckpointId = async (id: any) => {
     try {
-        const response = await api.get(`/v1/checkpoints/${id}`);
+        const response: any = await api.get(`/v1/checkpoints/${id}`);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud GET');
@@ -59,7 +59,7 @@ export const getCheckpointId = async (id: any) => {
 
 export const getCheckpointList = async (pattern: string, page: number, size: number) => {
     try {
-        const response = await api.get(`/v1/checkpoints/?pattern=${pattern}&page=${page}&size=${size}`);
+        const response: any = await api.get(`/v1/checkpoints/?pattern=${pattern}&page=${page}&size=${size}`);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud GET');
@@ -68,7 +68,7 @@ export const getCheckpointList = async (pattern: string, page: number, size: num
 
 export const getCheckpointListActive = async (pattern: string, page: number, size: number) => {
     try {
-        const response = await api.get(`/v1/checkpoints/active-checkpoins?pattern=${pattern}&page=${page}&size=${size}`);
+        const response: any = await api.get(`/v1/checkpoints/active-checkpoins?pattern=${pattern}&page=${page}&size=${size}`);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud GET');

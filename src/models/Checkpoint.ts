@@ -6,6 +6,9 @@ export interface Checkpoint {
     length: string;
     checkpointType?: CheckpointType;
     status?: boolean;
+    isActive?: boolean;
+    isDeleted?: boolean;
+    fee?: number
 }
 
 export interface CheckpointType {

@@ -15,41 +15,41 @@ import {
   import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import ModalTemplate from '@/components/Modal';
 import { Checkpoint, CheckpointType } from '@/models/Checkpoint';
+import { getCheckpointId, putCheckpoint } from '../../../../services/CheckpointServices/api';
 
 
 const listCheckpointsType: CheckpointType[] = [
   {
     id: 1,
-    name: 'Type 1',
+    name: 'ACTIVE',
     description: ''
   },
   {
     id: 2,
-    name: 'Type 2',
+    name: 'INACTIVE',
     description: ''
   },
-  {
-    id: 3,
-    name: 'Type 3',
-    description: ''
-  },
-  {
-    id: 4,
-    name: 'Type 4',
-    description: ''
-  }
+  // {
+  //   id: 3,
+  //   name: 'Type 3',
+  //   description: ''
+  // },
+  // {
+  //   id: 4,
+  //   name: 'Type 4',
+  //   description: ''
+  // }
 ];
 
-export default function ModalEditPC(props) {
+export default function ModalEditPC({idCheckpoint}) {
     const theme = useTheme();
-    const checkpointItem: Checkpoint = props.item;
     
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-      name: checkpointItem.name,
-      checkpointType: checkpointItem.checkpointType?.name,
-      latitude: checkpointItem.latitude,
-      length: checkpointItem.length,
+      name: undefined,
+      checkpointType: undefined,
+      latitude: undefined,
+      length: undefined,
       feeType: '',
       amount: 0.00
     });
@@ -62,22 +62,27 @@ export default function ModalEditPC(props) {
       amount: false
     });
     
-    useEffect(() => {
-
-        // setFormData({ name: '', checkpointType: '', latitude: '', length: '', feeType: '', amount: 0.00 });
-        // setErrors({ name: false, checkpointType: false, latitude: false, length: false, feeType: false, amount: false });
-        // Llamada a una API
-        try {
-            //Api obtener los datas del Checkpoint
-            // const response = await postLogin({});
-        } catch (error) {
-            console.error(error);
-        
-        }
-
+    useEffect( () => {
+        getCheckpoint();
         return () => { };
       }, [open]);
 
+  const getCheckpoint = async () => {
+    try {
+      const response = await getCheckpointId(idCheckpoint);
+      setFormData({
+        name: response.name,
+        checkpointType: response.checkpointType?.name,
+        latitude: response.latitude,
+        length: response.length,
+        feeType: '',
+        amount: 0.00
+      });
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -99,31 +104,26 @@ export default function ModalEditPC(props) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
     // Realizar validaciones adicionales y enviar el formulario si no hay errores
     if (formData.name && formData.checkpointType && formData.latitude && formData.length && formData.feeType && formData.amount) {
       try {
-        // const response = await postLogin({});
+        await putCheckpoint(formData);
+        setFormData({ name: '', checkpointType: '', latitude: '', length: '', feeType: '', amount: 0.00 });
+        setErrors({ name: false, checkpointType: false, latitude: false, length: false, feeType: false, amount: false });
+        handleClose();
+        
       } catch (error) {
         console.error(error);
         
       }
       console.log('Formulario enviado');
       // Reiniciar el estado y los campos del formulario
-      setFormData({ name: '', checkpointType: '', latitude: '', length: '', feeType: '', amount: 0.00 });
-      setErrors({ name: false, checkpointType: false, latitude: false, length: false, feeType: false, amount: false });
+      
     }
   };
 
     return (
       <>
-        {/* <Button onClick={handleClickOpen}
-        sx={{ mt: { xs: 2, md: 0 } }}
-        variant="contained"
-        startIcon={<AddRoundedIcon fontSize="small" />}
-      >
-        Crear Punto de Control
-      </Button> */}
         <Tooltip title="Edit Order" arrow>
             <IconButton
                 onClick={handleClickOpen}
@@ -171,7 +171,7 @@ export default function ModalEditPC(props) {
                       required
                       fullWidth
                       id="checkpointType"
-                      label="Tipo de Punto de Control"
+                      label="Estado"
                       name='checkpointType'
                       // value={currency}
                       // onChange={handleChange}

@@ -1,55 +1,39 @@
 import React from 'react';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import {
     Typography,
   Grid,
-  Tab,
-  Tabs,
   Divider,
   Container,
   Card,
   Box,
-  useTheme,
-  styled,
   Button,
-  TextField,
-  CardHeader,
-  FormControl,
-  InputAdornment,
-  OutlinedInput,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Tooltip
+  CardHeader
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';;
-import AddLocationRoundedIcon from '@mui/icons-material/AddLocationRounded';
 import RoutePath from './routepath';
 import FormDataRoute from './formDataRute';
 import SearchPCRoute from './searchPCRoute';
 import { Checkpoint } from '@/models/Checkpoint';
-import { Edge, PathRoute } from '@/models/RouteObj';
+import { postRoute } from '../../../../../services/RouteServices/api';
 
 
 
 
 function NewRoute() {
-  const theme = useTheme();
-  //para la consulta de busqueda
-  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
+  const [dataFromChild, setDataFromChild] = useState({
+    name: '',
+    description: ''
+  });
+
+  const [dataErrors, setDataErrors] = useState({
+    name: false,
+    description: false
+  })
   //los que se agregaron a la lista de la ruta
   const [checkpointsRoute, setCheckpointsRoute] = useState<Checkpoint[]>([]);
-  const [edgesRoute, setEdgesRoute] = useState<Edge[]>([]);
-  const [pathsRoute, setPathsRoute] = useState<PathRoute[]>([]);
 
   
   //Agrega data al array del use estate
@@ -64,6 +48,46 @@ function NewRoute() {
     const updatedItems = checkpointsRoute.filter((item) => item.id !== itemId);
     setCheckpointsRoute(updatedItems);
   };
+
+  const handleChildData = (data) => {
+    setDataFromChild(data);
+  };
+
+  const handleChildError = (data) => {
+    setDataErrors(data);
+  };
+
+  const sendData = async () => {
+    if ((dataFromChild.name != '' || dataFromChild.name != undefined || dataFromChild.description!= '' || dataFromChild.description != undefined) && checkpointsRoute.length>0) {
+      const dataRoute = {
+        id: 0,
+        name: dataFromChild.name,
+        description: dataFromChild.description,
+        packagesOnRoute: 0,
+        isActive: true,
+        isDeleted: true,
+        checkpoints: checkpointsRoute
+      }
+      const response = await postRoute(dataRoute);
+      console.log(response);
+      setCheckpointsRoute([]);
+      setDataFromChild({
+        name: '',
+        description: ''
+      });
+      setDataErrors({
+        name: false,
+        description: false
+      });
+
+      try {
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    
+  }
 
 
   return (
@@ -82,13 +106,7 @@ function NewRoute() {
             </Typography> */}
           </Grid>
           <Grid item>
-            {/* <Button
-              sx={{ mt: { xs: 2, md: 0 } }}
-              variant="contained"
-              // startIcon={<AddRoundedIcon fontSize="small" />}
-            >
-              Crear Nueva Ruta
-            </Button> */}
+
           </Grid>
         </Grid>
       </PageTitleWrapper>
@@ -107,14 +125,16 @@ function NewRoute() {
                     title="Creacion de Ruta"
                     action= {
                       <Box width={150}>
-                        <Button>
+                        <Button
+                        onClick={sendData}
+                        >
                           Crear ruta
                         </Button>
                       </Box>
                     }   
                   />
                   <Divider />
-                  <FormDataRoute/>
+                  <FormDataRoute onData={handleChildData} onErrors={handleChildError} />
                 </Grid>
                 
                 <Divider />
@@ -133,17 +153,6 @@ function NewRoute() {
                         <RoutePath dataCheckRoute={checkpointsRoute} onDataDeleteChange={handleDeleteItem}/>
                       </Box>
                     </Grid>
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <Box>
-                          
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <Box>
-
-                  </Box>
                 </Grid>
             </Card>
           </Grid>

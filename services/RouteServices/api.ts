@@ -57,7 +57,7 @@ export const getRouteId = async (id: any) => {
     }
 }
 
-export const getRouteList = async (pattern: string, page: number, size: number) => {
+export const getListRoute = async (pattern: string, page: number, size: number) => {
     try {
         const response: any = await api.get(`/v1/routes/?pattern=${pattern}&page=${page}&size=${size}`);
         return response
@@ -66,7 +66,7 @@ export const getRouteList = async (pattern: string, page: number, size: number) 
     }
 }
 
-export const getRouteListActive = async (pattern: string, page: number, size: number) => {
+export const getListRouteActive = async (pattern: string, page: number, size: number) => {
     try {
         const response: any = await api.get(`/v1/routes/active-routes?pattern=${pattern}&page=${page}&size=${size}`);
         return response

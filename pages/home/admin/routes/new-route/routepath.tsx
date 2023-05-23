@@ -1,30 +1,21 @@
 import React, { useEffect } from 'react';
-import { ChangeEvent, useState } from 'react';
 
 import {
-    Box,
-    CardHeader,
-    Typography,
-    IconButton,
-    FormControlLabel,
-    Checkbox,
-    FormGroup,
-    Tooltip,
-    styled,
-    Button,
-    useTheme,
-  } from '@mui/material';
-  import Timeline from '@mui/lab/Timeline';
-  import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';  import TimelineSeparator from '@mui/lab/TimelineSeparator';
-  import TimelineConnector from '@mui/lab/TimelineConnector';
-  import TimelineContent from '@mui/lab/TimelineContent';
-  import TimelineDot from '@mui/lab/TimelineDot';
-  import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-  import RefreshTwoToneIcon from '@mui/icons-material/RefreshTwoTone';
-  import AssignmentTwoToneIcon from '@mui/icons-material/AssignmentTwoTone';
-  import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-  import BusinessCenterTwoToneIcon from '@mui/icons-material/BusinessCenterTwoTone';
-  import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+  Box,
+  CardHeader,
+  Typography,
+  IconButton,
+  Tooltip,
+  styled,
+  useTheme,
+} from '@mui/material';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';  import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import RefreshTwoToneIcon from '@mui/icons-material/RefreshTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { Checkpoint } from '@/models/Checkpoint';
 import RadioButtonCheckedRoundedIcon from '@mui/icons-material/RadioButtonCheckedRounded';
 import GpsNotFixedRoundedIcon from '@mui/icons-material/GpsNotFixedRounded';
@@ -56,12 +47,31 @@ import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUnch
   `
   );
   
+  
 type ChildComponentProps = {
   dataCheckRoute: Array<Checkpoint>,
   onDataDeleteChange(itemId:  number): void
 }
+
+const getTypeIcon = (index, size) => {
+  if (index == 0) {
+    return <RadioButtonCheckedRoundedIcon />
+  }
+
+  if ((index) == (size-1)) {
+    return <RadioButtonUncheckedRoundedIcon />
+  }
+  return <GpsNotFixedRoundedIcon />
+}
+
+const getLineConect = (index, size) => { 
+  if ((index) != (size-1)) {
+    return (<TimelineConnector />);
+  }
+  return (<></>);
+}
   
-  function RoutePath( { dataCheckRoute, onDataDeleteChange }: ChildComponentProps, ) {
+function RoutePath( { dataCheckRoute, onDataDeleteChange }: ChildComponentProps, ) {
     const theme = useTheme();
 
     const handleChangeDelete = (itemId) => {
@@ -105,7 +115,7 @@ type ChildComponentProps = {
                     },
                 }}
                 >
-              { dataCheckRoute.map((itemCP) =>{
+              { dataCheckRoute.map((itemCP, index) =>{
                 return(
                   <>
                   <TimelineItem>
@@ -119,9 +129,9 @@ type ChildComponentProps = {
                         </TimelineOppositeContent> */}
                     <TimelineSeparator>
                     <TimelineDot color="primary">
-                        <RadioButtonCheckedRoundedIcon />
+                      {getTypeIcon(index, dataCheckRoute.length)}
                     </TimelineDot>
-                    <TimelineConnector />
+                      {getLineConect(index, dataCheckRoute.length)}
                     </TimelineSeparator>
                     <TimelineContent>
                     <Typography
@@ -153,58 +163,6 @@ type ChildComponentProps = {
                   </>
                 )
               }) }
-            <TimelineItem>
-                <TimelineSeparator>
-                <TimelineDot color="primary">
-                    <GpsNotFixedRoundedIcon />
-                </TimelineDot>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                <Typography
-                    variant="h4"
-                    sx={{
-                    pb: 2
-                    }}
-                >
-                    "Project Management"
-                    <Tooltip title="Quitar Punto" arrow>
-                        <IconButton
-                            sx={{
-                            '&:hover': {
-                                background: theme.colors.primary.lighter
-                            },
-                            marginLeft: 1,
-                            color: theme.palette.error.main
-                            }}
-                            color="inherit"
-                            size="small"
-                        >
-                            <DeleteTwoToneIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
-                </Typography>
-                
-                </TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-                <TimelineSeparator>
-                <TimelineDot color="primary">
-                    <RadioButtonUncheckedRoundedIcon />
-                </TimelineDot>
-                {/* <TimelineConnector /> */}
-                </TimelineSeparator>
-                <TimelineContent>
-                <Typography
-                    variant="h4"
-                    sx={{
-                    pb: 2
-                    }}
-                >
-                    "Business & Marketing"
-                </Typography>
-                </TimelineContent>
-            </TimelineItem>
             </Timeline>
         </TimelineWrapper>
         

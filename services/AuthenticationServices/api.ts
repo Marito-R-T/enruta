@@ -27,15 +27,10 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export const signinApi =async (data: any) => {
+export const signinApi = async (data: any) => {
     try {
-        const response = await axios.post('https://api.example.com/data', data,{
-            baseURL: URL_API,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        });
+        const response = await api.post('/v1/auth/authenticate', data);
+        console.log('Respuesta:', response.data);
         return response
     } catch (error) {
         console.error('Error al obtener los datos:', error);

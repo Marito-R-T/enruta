@@ -30,11 +30,7 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { Checkpoint, listCheckpointExample } from '@/models/Checkpoint';
 import ModalEditPC from './modalEditPC';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-
-
-  interface Filters {
-    status?: Checkpoint;
-  }
+import { deleteCheckpoint, getCheckpointList } from '../../../../services/CheckpointServices/api';
 
   const OutlinedInputWrapper = styled(OutlinedInput)(
     ({ theme }) => `
@@ -67,33 +63,51 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
 function TablePCAdmin() {
   const theme = useTheme();
-
+  const [listCP, setListCP] = useState<Checkpoint[]>([]);
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-      status: null
-  });
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-      let value = null;
-  
-      if (e.target.value !== 'all') {
-        value = e.target.value;
-      }
-  
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        status: value
-      }));
-  };
+  const [search, setSearch] = useState<string>(undefined);
     
+  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+    console.log(event.target.value);  
+  }
+
   const handlePageChange = (_event: any, newPage: number): void => {
     setPage(newPage);
+    getSearchCP(search, page, limit);
   };
 
   const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setLimit(parseInt(event.target.value));
+    getSearchCP(search, 1, limit);
   };
+
+  const handleSubmitSearch = async () => {
+    await getSearchCP(search, 1, limit);
+  }
+
+  const handleDeleteUser = async (idCP) => {
+    try {
+        const response = await deleteCheckpoint(idCP);
+        console.log(response);
+        await getSearchCP(search, page, limit);
+    } catch (error) {  
+        console.error(error);
+        
+    }
+  }
+
+  const getSearchCP = async (pattern: string, page: number, size: number) => {
+      try {
+          const response = await getCheckpointList(pattern, page, size);
+          setListCP(response);
+          
+      } catch (error) {  
+          console.error(error);
+          
+      }
+  }
 
   return (
       <Card>
@@ -104,8 +118,6 @@ function TablePCAdmin() {
                   <FormControl fullWidth variant="outlined">
                       <InputLabel>Status</InputLabel>
                       <Select
-                      value={filters.status || 'all'}
-                      onChange={handleStatusChange}
                       label="Status"
                       autoWidth
                       >
@@ -124,9 +136,12 @@ function TablePCAdmin() {
             <OutlinedInputWrapper
               type="text"
               placeholder="Search terms here..."
+              onChange={onChangeSearch}
               endAdornment={
                 <InputAdornment position="end">
-                  <Button variant="contained" size="small">
+                  <Button variant="contained" size="small"
+                  onClick={handleSubmitSearch}
+                  >
                     Search
                   </Button>
                 </InputAdornment>
@@ -226,9 +241,10 @@ function TablePCAdmin() {
                               {checkpoint.checkpointType?.name? checkpoint.checkpointType.name: 'Completado'}
                           </TableCell>
                           <TableCell align="right">
-                              <ModalEditPC item={checkpoint}/>
+                              <ModalEditPC idCheckpoint={checkpoint}/>
                               <Tooltip title="Delete Order" arrow>
                               <IconButton
+                                onClick={()=> {handleDeleteUser(checkpoint.id)}}
                                   sx={{
                                   '&:hover': { background: theme.colors.error.lighter },
                                   color: theme.palette.error.main

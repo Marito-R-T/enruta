@@ -12,27 +12,18 @@ import {
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ModalTemplate from '@/components/Modal';
 import { CheckpointType } from '@/models/Checkpoint';
+import { postCheckpoint } from '../../../../services/CheckpointServices/api';
 
 
 const listCheckpointsType: CheckpointType[] = [
   {
     id: 1,
-    name: 'Type 1',
+    name: 'ACTIVE',
     description: ''
   },
   {
     id: 2,
-    name: 'Type 2',
-    description: ''
-  },
-  {
-    id: 3,
-    name: 'Type 3',
-    description: ''
-  },
-  {
-    id: 4,
-    name: 'Type 4',
+    name: 'INACTIVE',
     description: ''
   }
 ];
@@ -94,7 +85,8 @@ export default function ModalAddPC() {
     // Realizar validaciones adicionales y enviar el formulario si no hay errores
     if (formData.name && formData.checkpointType && formData.latitude && formData.length && formData.feeType && formData.amount) {
       try {
-        // const response = await postLogin({});
+        const response = await postCheckpoint(formData);
+        handleClose();
       } catch (error) {
         console.error(error);
         
