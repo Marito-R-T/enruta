@@ -83,3 +83,12 @@ export const getPackageInformation = async (pattern: string, page: number, size:
         throw new Error('Error al enviar la solicitud GET');
     }
 }
+
+export const getRouteId = async (idRoute: any) => {
+    try {
+        const response: any = await api.get(`/v1/routes/${idRoute}`);
+        return response
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud GET');
+    }
+}

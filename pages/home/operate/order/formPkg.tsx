@@ -3,7 +3,7 @@ import { Package } from "@/models/Package";
 import { RouteObj } from "@/models/RouteObj";
 import { Box, Button, Divider, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getListRouteActive } from "../../../../services/RouteServices/api";
+import { getListRouteAll } from "../../../../services/RouteServices/api";
 import { getFee } from "../../../../services/PackageServices/api";
 
 type ChildComponentProps = {
@@ -168,11 +168,10 @@ export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage
     
         const getRoutes = async () => {
           try {
-            const response = await getListRouteActive('', 0, 0);
+            const response = await getListRouteAll();
             setListRoutes(response);
           } catch (error) {
             console.error(error);
-            
           }
         }
     

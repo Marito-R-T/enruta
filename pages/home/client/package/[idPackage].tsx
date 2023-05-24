@@ -3,13 +3,8 @@ import Head from "next/head";
 import {
     Typography,
   Grid,
-  Tab,
-  Tabs,
-  Divider,
   Container,
-  Card,
   Box,
-  useTheme,
   styled,
   Tooltip,
   IconButton,
@@ -32,29 +27,7 @@ import { Checkpoint } from "@/models/Checkpoint";
 import { Package } from "@/models/Package";
 
 
-const TimelineWrapper = styled(Timeline)(
-    ({ theme }) => `
-      margin-left: ${theme.spacing(2)};
-  
-      .MuiTimelineDot-root {
-        left: -${theme.spacing(2)};
-        margin-top: 0;
-        top: ${theme.spacing(0.5)};
-      }
-      
-      .MuiTimelineContent-root {
-        padding-left: ${theme.spacing(4)};
-      }
-      
-      .MuiFormControlLabel-root {
-        margin-left: -${theme.spacing(0.7)};
-      }
-      
-      .MuiFormControlLabel-label {
-        color: ${theme.colors.alpha.black[50]};
-      }
-  `
-  );
+
 
 export default function PackageClient() {
     const router = useRouter();
@@ -62,12 +35,12 @@ export default function PackageClient() {
     const [dataPackage, setDataPackage] = useState<Package>({
         id: 1,
         weight: 5,
-        priority: false,
+        prioritized: false,
         incomeDate: new Date('2023-01-25'),
         deliveryDate: new Date('2023-02-8'),
         deliveryAddress: 'Mexico Distrito Federal, Mexico, Mexico',
         fee: null,
-        route: null
+        routeId: null
     });
     const idPackage = router.query.idPackage as string;
     
@@ -125,7 +98,7 @@ export default function PackageClient() {
                         // gutterBottom
                         // noWrap
                         >
-                            Prioridad: {dataPackage.priority? "SI": "NO"}
+                            Prioridad: {dataPackage.prioritized? "SI": "NO"}
                         </Typography>
                         <Typography
                         variant="h4"

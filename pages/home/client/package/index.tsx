@@ -1,39 +1,19 @@
 import React from "react";
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
 import Footer from '@/components/Footer';
 import {
-    Typography,
+  Typography,
   Grid,
-  Tab,
-  Tabs,
-  Divider,
   Container,
   Card,
   Box,
-  useTheme,
-  styled
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-
-import TaskSearch from '@/content/Home/TaskSearch';
 import TableListMyPackageClient from "./myPackages";
 
 
 function PackageClient() {
-
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
-
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
-  };
 
   return (
     <>

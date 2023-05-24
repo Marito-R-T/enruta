@@ -1,4 +1,11 @@
-import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, TableCell, 
+import { 
+    Box, 
+    Button, 
+    CardHeader, 
+    IconButton, 
+    Table, 
+    TableBody, 
+    TableCell, 
     TableContainer, 
     TableFooter, 
     TableHead,
@@ -8,16 +15,17 @@ import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, Tab
     useTheme
 } from "@mui/material";
 import React, { useState } from "react";
-import { Package, listPackExp } from "@/models/Package";
+import { Package } from "@/models/Package";
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import ModalFormPkg from "./modalFormPkg";
+import { postOrders } from "../../../../services/ClientServices/api";
 
 
 export default function TableListPkgOrderClient() {
     const theme = useTheme();
 
     const [open, setOpen] = useState(false);
-    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>(listPackExp);
+    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>([]);
 
     const handleClickOpen = () => {
         console.log('adads');
@@ -34,26 +42,9 @@ export default function TableListPkgOrderClient() {
         setListPackagesOrder((prevItems) => [...prevItems, newItem]);
     };
     
-    // const handleEditItem = (itemId: number, newName: string) => {
-    //     setItems((prevItems) =>
-    //         prevItems.map((item) =>
-    //         item.id === itemId ? { ...item, name: newName } : item
-    //         )
-    //     );
-    // };
-
-    // const getItemById = (itemId: number) => {
-    //     return listPackagesOrder.find((item) => item.id === itemId);
-    // };
-    
-    // const handleGetItem = (itemId: number) => {
-    //     const item = getItemById(itemId);
-    //     if (item) {
-    //         console.log(item);
-    //     } else {
-    //         console.log("Item not found");
-    //     }
-    // };
+    const handleSetListPackages = (newlist) => {
+        setListPackagesOrder(newlist);
+    };
 
     const handleDeletePkg = (itemIndex: number) => {
         // const updatedItems = listPackagesOrder.filter((item, index) => index !== itemIndex);
@@ -71,7 +62,30 @@ export default function TableListPkgOrderClient() {
         return total.toFixed(2);
     }
 
-
+    const handleSubmit = async () => {
+        
+        // Realizar validaciones adicionales y enviar el formulario si no hay errores
+        if (listPackagesOrder.length>0) {
+          try {
+            const newOrder = {
+                id: 0,
+                creationDate: new Date(),
+                total: 0,
+                // nit: formData.nit,
+                // address: formData.address,
+                // name: formData.name,
+                packages: listPackagesOrder
+            }
+            const response = await postOrders(newOrder);
+            console.log(response);
+            handleSetListPackages([]);
+          } catch (error) {
+            console.error(error);
+            
+          }
+          console.log('Formulario enviado');
+        }
+      };
 
     return(
         <>
@@ -81,7 +95,7 @@ export default function TableListPkgOrderClient() {
                 <Box >
                     <Button
                     sx={{mr: 1}}
-                    onClick={() => {}}
+                    onClick={() => {handleSetListPackages([])}}
                     size="small"
                     variant="outlined"
                     color="error"
@@ -90,7 +104,7 @@ export default function TableListPkgOrderClient() {
                     </Button>
                     <Button
                     sx={{mr: 1}}
-                    onClick={() => {}}
+                    onClick={() => {handleSubmit}}
                     size="small"
                     variant="outlined"
                     color="primary"
@@ -159,7 +173,7 @@ export default function TableListPkgOrderClient() {
                                         gutterBottom
                                         noWrap
                                         >
-                                        {packageItem.priority? 'SI':'NO'}
+                                        {packageItem.prioritized? 'SI':'NO'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>

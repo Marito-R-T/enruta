@@ -1,70 +1,45 @@
-import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, TableCell, 
+import { Box, 
+    CardHeader, 
+    Table, 
+    TableBody, 
+    TableCell, 
     TableContainer, 
-    TableFooter, 
     TableHead,
     TableRow,
-    Tooltip,
     Typography,
-    useTheme
 } from "@mui/material";
-import React, { useState } from "react";
-import { Package, listPackExp } from "@/models/Package";
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import ModalFormPkg from "./modalFormPkg";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { Order } from "@/models/Order";
 
 
 export default function TableListMyOrderClient() {
-    const theme = useTheme();
-    const router = useRouter();
+    // const router = useRouter();
 
-    const [open, setOpen] = useState(false);
     const [listPackagesOrder, setListPackagesOrder] = useState<Order[]>([]);
 
-    const handleClickOpen = () => {
-        console.log('adads');
-        
-        setOpen(true);
-    };
-    
-    const handleClose = () => {
-        setOpen(false);
-    };
 
-    
-    
-    // const handleEditItem = (itemId: number, newName: string) => {
-    //     setItems((prevItems) =>
-    //         prevItems.map((item) =>
-    //         item.id === itemId ? { ...item, name: newName } : item
-    //         )
-    //     );
-    // };
-
-    // const getItemById = (itemId: number) => {
-    //     return listPackagesOrder.find((item) => item.id === itemId);
-    // };
-    
-    // const handleGetItem = (itemId: number) => {
-    //     const item = getItemById(itemId);
-    //     if (item) {
-    //         console.log(item);
-    //     } else {
-    //         console.log("Item not found");
-    //     }
-    // };
-
-    const handleDeletePkg = (itemIndex: number) => {
-        // const updatedItems = listPackagesOrder.filter((item, index) => index !== itemIndex);
-        const updatedItems = [...listPackagesOrder.slice(0, itemIndex), ...listPackagesOrder.slice(itemIndex + 1)];
-        setListPackagesOrder(updatedItems);
-    }
     
     const handleRowDoubleClick = (rowId: number) => {
         // router.push(`/home/client/package/${rowId}` );
         window.open(`/home/client/order/${rowId}`, '_blank');
     };
+
+    const getMyOrder = async () => {
+        try {
+            // const response = await getOrderList();
+            // setListPackagesOrder(response);
+        } catch (error) {
+            console.error(error);
+            
+        }
+    }
+
+    useEffect(() => {
+        getMyOrder();
+        return () => {
+  
+        };
+      }, []);
 
     return(
         <>
@@ -72,24 +47,7 @@ export default function TableListMyOrderClient() {
             title="Lista de Ordenes"
             action= {
                 <Box width={300} >
-                    {/* <Button
-                    sx={{mr: 1}}
-                    onClick={() => {}}
-                    size="small"
-                    variant="outlined"
-                    color="primary"
-                    >
-                    Finalizar Orden
-                    </Button>
-                    <Button
-                    onClick={handleClickOpen}
-                    size="small"
-                    variant="contained"
-                    color="info"
-                    >
-                    Agregar Paquete
-                    </Button> */}
-                     {/* <ModalFormPkg open={open} onOpenChange={handleClickOpen} onCloseChange={handleClose} onAddPackage={handleAddPackage} /> */}
+                    
                 </Box>
             }   
             />

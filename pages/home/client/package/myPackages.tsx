@@ -1,66 +1,28 @@
-import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, TableCell, 
+import { 
+    Box, 
+    CardHeader, 
+    Table, 
+    TableBody, 
+    TableCell, 
     TableContainer, 
     TableFooter, 
     TableHead,
+    TablePagination,
     TableRow,
-    Tooltip,
     Typography,
-    useTheme
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Package } from "@/models/Package";
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { useRouter } from "next/router";
+import { getPackageList } from "../../../../services/PackageServices/api";
 
 
 export default function TableListMyPackageClient() {
-    const theme = useTheme();
-    const router = useRouter();
+    
+    // const router = useRouter();
+    const [page, setPage] = useState<number>(0);
+    const [limit, setLimit] = useState<number>(5);
 
-    const [open, setOpen] = useState(false);
     const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>([]);
-
-    const handleClickOpen = () => {
-        console.log('adads');
-        
-        setOpen(true);
-    };
-    
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleAddPackage = (item: Package) => {
-        const newItem: Package = item;
-        setListPackagesOrder((prevItems) => [...prevItems, newItem]);
-    };
-    
-    // const handleEditItem = (itemId: number, newName: string) => {
-    //     setItems((prevItems) =>
-    //         prevItems.map((item) =>
-    //         item.id === itemId ? { ...item, name: newName } : item
-    //         )
-    //     );
-    // };
-
-    // const getItemById = (itemId: number) => {
-    //     return listPackagesOrder.find((item) => item.id === itemId);
-    // };
-    
-    // const handleGetItem = (itemId: number) => {
-    //     const item = getItemById(itemId);
-    //     if (item) {
-    //         console.log(item);
-    //     } else {
-    //         console.log("Item not found");
-    //     }
-    // };
-
-    const handleDeletePkg = (itemIndex: number) => {
-        // const updatedItems = listPackagesOrder.filter((item, index) => index !== itemIndex);
-        const updatedItems = [...listPackagesOrder.slice(0, itemIndex), ...listPackagesOrder.slice(itemIndex + 1)];
-        setListPackagesOrder(updatedItems);
-    }
 
     const sumFeePackage = () => {
         let total = 0
@@ -77,30 +39,40 @@ export default function TableListMyPackageClient() {
         window.open(`/home/client/package/${rowId}`, '_blank');
     };
 
+    const handlePageChange = (_event: any, newPage: number): void => {
+        setPage(newPage);
+        getListOrderPackFromUser('', page, limit);
+      };
+    
+    const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
+        setLimit(parseInt(event.target.value));
+        getListOrderPackFromUser('', 1, limit);
+    };
+
+    const getListOrderPackFromUser = async (pattern: string, page: number, size: number) => {
+        try {
+            const response = await getPackageList(pattern, page, size);
+            setListPackagesOrder(response);
+        } catch (error) {
+            console.error(error);
+            
+        }
+    }
+
+    useEffect(() => {
+        getListOrderPackFromUser('', 1, limit);
+        return () => {
+          
+        };
+      }, [open]);
+
     return(
         <>
             <CardHeader
             title="Lista de Paquetes de Ordenes"
             action= {
                 <Box width={300} >
-                    {/* <Button
-                    sx={{mr: 1}}
-                    onClick={() => {}}
-                    size="small"
-                    variant="outlined"
-                    color="primary"
-                    >
-                    Finalizar Orden
-                    </Button>
-                    <Button
-                    onClick={handleClickOpen}
-                    size="small"
-                    variant="contained"
-                    color="info"
-                    >
-                    Agregar Paquete
-                    </Button> */}
-                     {/* <ModalFormPkg open={open} onOpenChange={handleClickOpen} onCloseChange={handleClose} onAddPackage={handleAddPackage} /> */}
+
                 </Box>
             }   
             />
@@ -295,6 +267,17 @@ export default function TableListMyPackageClient() {
                     </TableFooter>
                 </Table>
             </TableContainer>
+            <Box p={2}>
+                <TablePagination
+                component="div"
+                count={35}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleLimitChange}
+                page={page}
+                rowsPerPage={limit}
+                rowsPerPageOptions={[5, 10, 25, 30]}
+                />
+            </Box>
         </>
     );
 }

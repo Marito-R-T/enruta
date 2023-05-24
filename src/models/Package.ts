@@ -1,4 +1,4 @@
-import { FeePkg } from "./FeePkg";
+
 import { RouteObj } from "./RouteObj";
 
 export interface Package {
@@ -11,6 +11,6 @@ export interface Package {
     deliveryAddress: string;
     routeId: number;
     fee?: any;
-    prioritizedFee: number;
+    prioritizedFee?: number;
     route?: RouteObj
 }

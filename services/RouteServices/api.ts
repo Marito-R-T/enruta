@@ -74,3 +74,12 @@ export const getListRouteActive = async (pattern: string, page: number, size: nu
         throw new Error('Error al enviar la solicitud GET');
     }
 }
+
+export const getListRouteAll = async () => {
+    try {
+        const response: any = await api.get(`/v1/routes/list`);
+        return response
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud GET');
+    }
+}
