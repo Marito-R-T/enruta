@@ -3,7 +3,7 @@ import { GLOBAL } from '../Global';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../auth/Store';
 
-const URL_API = GLOBAL.URL_API+"/checkpoint-service";
+const URL_API = GLOBAL.URL_API_CHECKPOINT+"/checkpoint-service";
 
 const apiConfig: AxiosRequestConfig = {
     baseURL: URL_API,

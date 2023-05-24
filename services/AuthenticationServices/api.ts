@@ -3,7 +3,7 @@ import { GLOBAL } from '../Global';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../auth/Store';
 
-const URL_API = GLOBAL.URL_API+"/authentication-service";
+const URL_API = GLOBAL.URL_API_AUTHENTICATE+"/authentication-service";
 
 const apiConfig: AxiosRequestConfig = {
     baseURL: URL_API,

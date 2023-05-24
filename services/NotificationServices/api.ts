@@ -3,7 +3,7 @@ import { GLOBAL } from '../Global';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../auth/Store';
 
-const URL_API = GLOBAL.URL_API+"/notification-service";
+const URL_API = GLOBAL.URL_API_NOTIFICATION+"/notification-service";
 
 let apiConfig: AxiosRequestConfig = {
     baseURL: URL_API,
