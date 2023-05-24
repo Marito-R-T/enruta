@@ -8,7 +8,7 @@ import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, Tab
     useTheme
 } from "@mui/material";
 import React, { useState } from "react";
-import { Package, listPackExp } from "@/models/Package";
+import { Package } from "@/models/Package";
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useRouter } from "next/router";
 
@@ -18,7 +18,7 @@ export default function TableListMyPackageClient() {
     const router = useRouter();
 
     const [open, setOpen] = useState(false);
-    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>(listPackExp);
+    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>([]);
 
     const handleClickOpen = () => {
         console.log('adads');
@@ -155,7 +155,7 @@ export default function TableListMyPackageClient() {
                                         gutterBottom
                                         noWrap
                                         >
-                                        {packageItem.priority? 'SI':'NO'}
+                                        {packageItem.prioritized? 'SI':'NO'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>

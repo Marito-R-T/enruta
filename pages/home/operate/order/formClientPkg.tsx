@@ -1,18 +1,15 @@
 import { Box, 
     Button, 
+    Card, 
     CardHeader, 
     Divider, 
-    FormControl, 
     Grid, 
-    InputLabel, 
-    MenuItem, 
-    Select, 
     TextField
 } from "@mui/material";
 import React, { useState } from "react";
+import { postOrders } from "../../../../services/ClientServices/api";
 
-
-export default function FormClientPkg() {
+export default function FormClientPkg( { onlistPackages, onSetListPackages } ) {
     const [formData, setFormData] = useState({
         name: '',
         nit: '',
@@ -23,22 +20,43 @@ export default function FormClientPkg() {
         nit: false,
         address: false
     });
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         
         setFormData({ ...formData, [name]: value });
-        // Validar el campo después de cada cambio y establecer el estado de error
         setErrors({ ...errors, [name]: !value });
       };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleChangeNit = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        
+        setFormData({ ...formData, [name]: value });
+        setErrors({ ...errors, [name]: !value });
+      };
+
+    const handleSetListPack = () => {
+        onSetListPackages([]);
+    }
+
+    const handleSubmit = async () => {
+        console.log(onlistPackages);
         
         // Realizar validaciones adicionales y enviar el formulario si no hay errores
-        if (formData.name && formData.nit && formData.address) {
+        if (formData.name && formData.nit && formData.address && onlistPackages.length>0) {
           try {
-            // const response = await postLogin({});
+            const newOrder = {
+                id: 0,
+                creationDate: new Date(),
+                total: 0,
+                nit: formData.nit,
+                address: formData.address,
+                name: formData.name,
+                packages: onlistPackages
+            }
+            const response = await postOrders(newOrder);
+            console.log(response);
+            handleSetListPack();
           } catch (error) {
             console.error(error);
             
@@ -51,12 +69,14 @@ export default function FormClientPkg() {
       };
     return(
         <>
+
             <CardHeader
             title="Datos del Cliente"
             action= {
                 <Box width={150}>
                     <Button
-                    //  onClick={handleClickOpen}
+                    // disabled={onlistPackages.length==0}
+                     onClick={handleSubmit}
                      size="small"
                     //  variant="contained"
                      color="primary"
@@ -67,7 +87,7 @@ export default function FormClientPkg() {
             }   
             />
             <Divider />
-            <Box component="form" onSubmit={handleSubmit} sx={{ pl: 1, pr: 1 }}>
+            <Box component="form" sx={{ pl: 1, pr: 1 }}>
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={6}>
                         <Box>
@@ -81,7 +101,7 @@ export default function FormClientPkg() {
                             autoFocus
                             type='text'
                             value={formData.nit}
-                            onChange={handleChange}
+                            onChange={handleChangeNit}
                             error={errors.nit}
                             helperText={errors.nit ? 'Campo requerido' : ''}
                             />

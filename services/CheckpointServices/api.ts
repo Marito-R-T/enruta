@@ -74,3 +74,12 @@ export const getCheckpointListActive = async (pattern: string, page: number, siz
         throw new Error('Error al enviar la solicitud GET');
     }
 }
+
+export const getPackageInformation = async (pattern: string, page: number, size: number) => {
+    try {
+        const response: any = await api.get(`/v1/packages-information/?pattern=${pattern}&page=${page}&size=${size}`);
+        return response
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud GET');
+    }
+}

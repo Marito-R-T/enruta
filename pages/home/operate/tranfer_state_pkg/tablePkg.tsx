@@ -1,16 +1,11 @@
 import React from 'react';
-import { FC, ChangeEvent, useState } from 'react';
-import { format } from 'date-fns';
-
-import PropTypes from 'prop-types';
+import { ChangeEvent, useState } from 'react';
 import {
     Tooltip,
     Divider,
     Box,
     FormControl,
-    InputLabel,
     Card,
-    Checkbox,
     IconButton,
     Table,
     TableBody,
@@ -19,8 +14,6 @@ import {
     TablePagination,
     TableRow,
     TableContainer,
-    Select,
-    MenuItem,
     Typography,
     useTheme,
     CardHeader,
@@ -29,35 +22,11 @@ import {
     InputAdornment,
     Button
   } from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { Checkpoint } from '@/models/Checkpoint';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
-import { Package, listPackExp } from '@/models/Package';
-
-  interface Filters {
-    status?: Checkpoint;
-  }
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
+import { postPackage } from '../../../../services/PackageServices/api';
+import { getPackageInformation } from '../../../../services/CheckpointServices/api';
+import { PackageInformation } from '@/models/Checkpoint';
 
 
   const OutlinedInputWrapper = styled(OutlinedInput)(
@@ -69,48 +38,63 @@ import { Package, listPackExp } from '@/models/Package';
 
 function TablePkgOp() {
     const theme = useTheme();
-
+    const [listPackages, setListPackages] = useState<PackageInformation[]>([]);
     const [page, setPage] = useState<number>(0);
     const [limit, setLimit] = useState<number>(5);
-    const [filters, setFilters] = useState<Filters>({
-        status: null
-    });
+    const [search, setSearch] = useState<string>(undefined);
 
-    let listPackages: Array<Package> = [];
-    listPackages = listPackExp;
+    const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+        console.log(event.target.value);
+        
+    }
 
-    const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        let value = null;
+    const handlePageChange = (_event: any, newPage: number): void => {
+        setPage(newPage);
+        getSearchPackage(search, page, limit);
+      };
     
-        if (e.target.value !== 'all') {
-          value = e.target.value;
-        }
-    
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          status: value
-        }));
+    const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
+        setLimit(parseInt(event.target.value));
+        getSearchPackage(search, 1, limit);
     };
+
+    const handleSubmitSearch = async () => {
+        await getSearchPackage(search, 1, limit);
+    }
+
+
+    const getSearchPackage = async (pattern: string, page: number, size: number) => {
+        try {
+            const response = await getPackageInformation(pattern, page, size);
+            setListPackages(response);
+            
+        } catch (error) {  
+            console.error(error);
+            
+        }
+    }
+
+    const traslatePackage = async (idPackage, idCheckpoint) => {
+        try {
+            const data = {
+                idPackage: idPackage,
+                idCheckpoint: idCheckpoint
+            }
+            await postPackage(data);
+            await getSearchPackage(search, 1, limit);;
+            
+        } catch (error) {  
+            console.error(error);
+            
+        }
+    }
 
     return (
         <Card>
             <CardHeader>
                 <Box width={150}>
-                    <FormControl fullWidth variant="outlined">
-                        <InputLabel>Status</InputLabel>
-                        <Select
-                        value={filters.status || 'all'}
-                        onChange={handleStatusChange}
-                        label="Status"
-                        autoWidth
-                        >
-                        {statusOptions.map((statusOption) => (
-                            <MenuItem key={statusOption.id} value={statusOption.id}>
-                            {statusOption.name}
-                            </MenuItem>
-                        ))}
-                        </Select>
-                    </FormControl>
+                    
                 </Box>
             </CardHeader>
             <Divider />
@@ -118,9 +102,12 @@ function TablePkgOp() {
               <OutlinedInputWrapper
                 type="text"
                 placeholder="Search terms here..."
+                onChange={onChangeSearch}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Button variant="contained" size="small">
+                    <Button variant="contained" size="small"
+                    onClick={handleSubmitSearch}
+                    >
                       Search
                     </Button>
                   </InputAdornment>
@@ -136,14 +123,11 @@ function TablePkgOp() {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Orden ID</TableCell>
                             <TableCell>Paquete ID</TableCell>
-                            <TableCell>Peso</TableCell>
-                            <TableCell>Fecha Ingeso</TableCell>
-                            <TableCell>Fecha Entrega</TableCell>
-                            {/* <TableCell align="right">Tarifa</TableCell> */}
-                            <TableCell align="right">Ubicacion</TableCell>
-                            <TableCell align="right">Ruta</TableCell>
+                            <TableCell>Fecha Llegada</TableCell>
+                            <TableCell>Ubicacion</TableCell>
+                            <TableCell align="right">ID Punto Control</TableCell>
+                            <TableCell align="right">Nombre Punto Control</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -153,7 +137,7 @@ function TablePkgOp() {
                                 <>
                                     <TableRow
                                     hover
-                                    key={pkgItem.id}
+                                    key={pkgItem.idPackage}
                                     >
                                         <TableCell>
                                             <Typography
@@ -163,7 +147,7 @@ function TablePkgOp() {
                                             gutterBottom
                                             noWrap
                                             >
-                                            ?
+                                            {pkgItem.idPackage}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
@@ -174,24 +158,24 @@ function TablePkgOp() {
                                             gutterBottom
                                             noWrap
                                             >
-                                            {pkgItem.id}
+                                            {pkgItem.arrivalDate.toLocaleString()}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography
-                                            variant="body1"
+                                            variant="body2"
                                             fontWeight="bold"
-                                            color="text.primary"
+                                            color="text.secondary"
                                             gutterBottom
                                             noWrap
                                             >
-                                            {pkgItem.weight}
+                                            {pkgItem.latitude+', '+pkgItem.length}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" noWrap>
+                                            {/* <Typography variant="body2" color="text.secondary" noWrap>
                                             lbs
-                                            </Typography>
+                                            </Typography> */}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell align="right">
                                             <Typography
                                             variant="body1"
                                             fontWeight="bold"
@@ -199,28 +183,7 @@ function TablePkgOp() {
                                             gutterBottom
                                             noWrap
                                             >
-                                            {pkgItem.incomeDate.toLocaleString()}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" noWrap>
-                                            {/* {numeral(50).format(
-                                                `${54}0,0.00`
-                                            )} */}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                            variant="body1"
-                                            fontWeight="bold"
-                                            color="text.primary"
-                                            gutterBottom
-                                            noWrap
-                                            >
-                                            {pkgItem.deliveryDate.toLocaleDateString()}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" noWrap>
-                                            {/* {numeral(50).format(
-                                                `${54}0,0.00`
-                                            )} */}
+                                            {pkgItem.idCheckpoint}
                                             </Typography>
                                         </TableCell>
                                         <TableCell align="right">
@@ -231,7 +194,7 @@ function TablePkgOp() {
                                             gutterBottom
                                             noWrap
                                             >
-                                            {}
+                                            {pkgItem.checkpointName}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary" noWrap>
                                             {/* {numeral(50).format(
@@ -239,26 +202,6 @@ function TablePkgOp() {
                                             )} */}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell align="right">
-                                            <Typography
-                                            variant="body1"
-                                            fontWeight="bold"
-                                            color="text.primary"
-                                            gutterBottom
-                                            noWrap
-                                            >
-                                            {}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" noWrap>
-                                            {/* {numeral(50).format(
-                                                `${54}0,0.00`
-                                            )} */}
-                                            </Typography>
-                                        </TableCell>
-                                        {/* <TableCell align="right"> */}
-                                            {/* {getStatusLabel(cryptoOrder.status)} */}
-                                            {/* Completed
-                                        </TableCell> */}
                                         <TableCell align="right">
                                             <Tooltip title="Info Paquete" arrow>
                                                 <IconButton
@@ -276,6 +219,7 @@ function TablePkgOp() {
                                             </Tooltip>
                                             <Tooltip title="Trasladar al Siguiente Punto de Control" arrow>
                                                 <Button
+                                                onClick={() => traslatePackage(pkgItem.idPackage, pkgItem.idCheckpoint)}
                                                 type="submit"
                                                 size="small"
                                                 variant="contained"
@@ -284,32 +228,6 @@ function TablePkgOp() {
                                                     Trasladar
                                                 </Button>
                                             </Tooltip>
-                                            {/* <Tooltip title="Edit Order" arrow>
-                                            <IconButton
-                                                sx={{
-                                                '&:hover': {
-                                                    background: theme.colors.primary.lighter
-                                                },
-                                                color: theme.palette.primary.main
-                                                }}
-                                                color="inherit"
-                                                size="small"
-                                            >
-                                                <EditTwoToneIcon fontSize="small" />
-                                            </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title="Delete Order" arrow>
-                                            <IconButton
-                                                sx={{
-                                                '&:hover': { background: theme.colors.error.lighter },
-                                                color: theme.palette.error.main
-                                                }}
-                                                color="inherit"
-                                                size="small"
-                                            >
-                                                <DeleteTwoToneIcon fontSize="small" />
-                                            </IconButton>
-                                            </Tooltip> */}
                                         </TableCell>
                                     </TableRow>
                                 </>
@@ -319,6 +237,17 @@ function TablePkgOp() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box p={2}>
+                <TablePagination
+                component="div"
+                count={35}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleLimitChange}
+                page={page}
+                rowsPerPage={limit}
+                rowsPerPageOptions={[5, 10, 25, 30]}
+                />
+            </Box>
         </Card>
         
     );

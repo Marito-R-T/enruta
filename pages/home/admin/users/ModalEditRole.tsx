@@ -52,7 +52,7 @@ export default function ModalEditRole({ idUser }) {
                       name: "string",
                       description: ""
                     }
-                  }
+                }
                 const response = await putUsers(flagUser);
                 console.log(response);
                 

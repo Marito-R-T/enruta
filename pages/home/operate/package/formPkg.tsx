@@ -1,27 +1,12 @@
 import React from "react";
-import Head from 'next/head';
-import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
-import Footer from '@/components/Footer';
+import { useState } from 'react';
 import {
-  Typography,
   Grid,
-  Tab,
-  Tabs,
   Divider,
-  Container,
   Card,
   Box,
-  useTheme,
-  styled,
   CardHeader,
-  FormControl,
-  MenuItem,
-  Button,
-  TextField
 } from '@mui/material';
-import PageTitleWrapper from '@/components/PageTitleWrapper';
 
 
 

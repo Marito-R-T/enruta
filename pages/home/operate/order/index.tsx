@@ -10,7 +10,6 @@ import {
   Box,
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import FormClientPkg from './formClientPkg';
 import TableListPkgOrder from './tableListPkgOrder';
 
 
@@ -49,10 +48,7 @@ function OrderOp() {
           spacing={3}
         >
           <Grid item xs={12}>
-            <Card>
-              {/* Aqui el form de la data del cliente */}
-              <FormClientPkg/>
-            </Card>
+            
             <Card>
               {/* Aqui la tabla de los paquetes junto con el modal de la info
                   de paquetes */}

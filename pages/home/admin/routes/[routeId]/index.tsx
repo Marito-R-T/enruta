@@ -1,23 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
-import Footer from '@/components/Footer';
 import {
-    Typography,
-  Grid,
-  Tab,
-  Tabs,
-  Divider,
+  Typography,
   Container,
-  Card,
   Box,
-  useTheme,
-  styled
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import { GetServerSideProps, NextPageContext } from 'next';
 
 
 // export async function getServerSideProps: GetServerSideProps<Props> = async (
@@ -34,28 +23,9 @@ import { GetServerSideProps, NextPageContext } from 'next';
 //   };
 // };
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-}
 
-interface Props {
-  product: Product;
-}
 
 function RouteDetails() {
-
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
-
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
-
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
-  };
 
   return (
     <>

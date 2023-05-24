@@ -64,7 +64,7 @@ export const postAuthenticate = async (data: any) => {
 //Cuando el operador es que registra directamente
 export const postRegisterOp = async (data: any) => {
     try {
-        const response = await api.post('/v1/auth/registerop', data);
+        const response = await api.post('/v1/auth/register', data);
         console.log('Respuesta:', response);
         return response
     } catch (error) {
@@ -77,15 +77,7 @@ export const postRegisterOp = async (data: any) => {
 //Registro para el cliente donde solo el se registra asi mismo
 export const postRegisterClient = async (data: any) => {
     try {
-        console.log(data);
-
-        const response = await axios.post('http://localhost:8080/authentication-service/v1/auth/register', data, {
-            baseURL: URL_API,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        });
+        const response = await api.post('/v1/auth/register', data);
         console.log('Respuesta:', response);
         return response
     } catch (error) {

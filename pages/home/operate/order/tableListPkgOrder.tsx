@@ -1,4 +1,12 @@
-import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, TableCell, 
+import { 
+    Box, 
+    Button, 
+    Card, 
+    CardHeader, 
+    IconButton, 
+    Table, 
+    TableBody, 
+    TableCell, 
     TableContainer, 
     TableFooter, 
     TableHead,
@@ -9,15 +17,17 @@ import { Box, Button, CardHeader, FormControl, IconButton, Table, TableBody, Tab
 } from "@mui/material";
 import React, { useState } from "react";
 import FormPkg from "./formPkg";
-import { Package, listPackExp } from "@/models/Package";
+import { Package } from "@/models/Package";
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import FormClientPkg from "./formClientPkg";
 
 
 export default function TableListPkgOrder() {
     const theme = useTheme();
 
     const [open, setOpen] = useState(false);
-    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>(listPackExp);
+    const [listPackagesOrder, setListPackagesOrder] = useState<Package[]>([]);
+    
 
     const handleClickOpen = () => {
         console.log('adads');
@@ -33,27 +43,10 @@ export default function TableListPkgOrder() {
         const newItem: Package = item;
         setListPackagesOrder((prevItems) => [...prevItems, newItem]);
     };
-    
-    // const handleEditItem = (itemId: number, newName: string) => {
-    //     setItems((prevItems) =>
-    //         prevItems.map((item) =>
-    //         item.id === itemId ? { ...item, name: newName } : item
-    //         )
-    //     );
-    // };
 
-    // const getItemById = (itemId: number) => {
-    //     return listPackagesOrder.find((item) => item.id === itemId);
-    // };
-    
-    // const handleGetItem = (itemId: number) => {
-    //     const item = getItemById(itemId);
-    //     if (item) {
-    //         console.log(item);
-    //     } else {
-    //         console.log("Item not found");
-    //     }
-    // };
+    const handleSetListPackages= (newlist) => {
+        setListPackagesOrder(newlist);
+    };
 
     const handleDeletePkg = (itemIndex: number) => {
         // const updatedItems = listPackagesOrder.filter((item, index) => index !== itemIndex);
@@ -64,7 +57,7 @@ export default function TableListPkgOrder() {
     const sumFeePackage = () => {
         let total = 0
         for (let i = 0; i < listPackagesOrder.length; i++) {
-            total += listPackagesOrder[i].fee? listPackagesOrder[i].fee.amount : 0;
+            total += listPackagesOrder[i].fee? listPackagesOrder[i].fee : 0;
             // total += listPackagesOrder[i].fee? listPackagesOrder[i].fee.amount : 0;
             
         }
@@ -75,6 +68,11 @@ export default function TableListPkgOrder() {
 
     return(
         <>
+        <Card>
+              {/* Aqui el form de la data del cliente */}
+              <FormClientPkg onlistPackages={listPackagesOrder} onSetListPackages={handleSetListPackages}/>
+        </Card>
+        
             <CardHeader
             title="Lista de Paquete de la Orden"
             action= {
@@ -141,7 +139,7 @@ export default function TableListPkgOrder() {
                                         gutterBottom
                                         noWrap
                                         >
-                                        {packageItem.priority? 'SI':'NO'}
+                                        {packageItem.prioritized? 'SI':'NO'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>

@@ -5,11 +5,9 @@ import { Box,
     Button, 
     InputAdornment, 
     IconButton, 
-    FormControl, 
-    InputLabel,
-    OutlinedInput,
 } from "@mui/material";
 import React, { useState } from "react";
+import { postRegisterOp } from "../../../../services/AuthenticationServices/api";
 
 
 export default function FormClientOp() {
@@ -56,7 +54,8 @@ export default function FormClientOp() {
         // Realizar validaciones adicionales y enviar el formulario si no hay errores
         if (formData.email && formData.nit && formData.fullname && formData.numberPhone && formData.username && formData.age && formData.password) {
           try {
-            // const response = await postLogin({});
+            const response = await postRegisterOp(formData);
+            console.log(response);
           } catch (error) {
             console.error(error);
             

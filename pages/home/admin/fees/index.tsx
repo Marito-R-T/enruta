@@ -1,38 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useState } from 'react';
 import PageHeader from '@/content/Home/PageHeader';
 import Footer from '@/components/Footer';
 import {
-    Typography,
+  Typography,
   Grid,
-  Tab,
-  Tabs,
-  Divider,
   Container,
   Card,
   Box,
-  useTheme,
-  styled
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Table,
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-
-import TaskSearch from '@/content/Home/TaskSearch';
+import ModalEditFee from './ModalEditFee';
+import { getFee } from '../../../../services/PackageServices/api';
 
 
 function RatesAdmin() {
 
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
+  const [formFee, setFormFee] = useState({
+    fee: 0,
+    prioritizedFee: 0
+  });
 
-  const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
-  ];
+  useEffect(() => {
+    getFeeGlobal();
+    return () => {
+      
+    };
+  }, []);
 
-  const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
-    setCurrentTab(value);
-  };
+  const getFeeGlobal = async () => {
+    try {
+        const response: any = await getFee();
+        setFormFee({fee: response.fee, prioritizedFee: response.prioritizedFee});
+    } catch (error) {
+        console.error(error);
+        
+    }
+  }
 
   return (
     <>
@@ -58,8 +70,92 @@ function RatesAdmin() {
             </Box>
         </Box>
       </PageTitleWrapper>
-      <Container maxWidth="lg">
-
+      <Container maxWidth="sm">
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+          paddingTop={3}
+          paddingX={1}
+        >
+          <Grid item xs={12}>
+            <Card>
+            <Grid item xs={12} md={12}>
+              <Box>
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Tipo</TableCell>
+                        <TableCell>Tarifa</TableCell>
+                        <TableCell>Action</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          <Typography
+                            variant="body1"
+                            fontWeight="bold"
+                            color="text.primary"
+                            gutterBottom
+                            noWrap
+                          >
+                            Tarifa Global (por LBS)
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                          variant="body1"
+                          fontWeight="bold"
+                          color="text.primary"
+                          gutterBottom
+                          noWrap
+                          >
+                            {formFee.fee}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <ModalEditFee/>
+                      </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <Typography
+                            variant="body1"
+                            fontWeight="bold"
+                            color="text.primary"
+                            gutterBottom
+                            noWrap
+                          >
+                            Tarifa de Priorizacion
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                          variant="body1"
+                          fontWeight="bold"
+                          color="text.primary"
+                          gutterBottom
+                          noWrap
+                          > 
+                          {formFee.prioritizedFee}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <ModalEditFee/>
+                      </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+              </Grid>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
       <Footer />
     </>

@@ -21,7 +21,17 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export const putPackage = async (data: any) => {
+//Trasladar paquete
+export const postPackage = async (data: any) => {
+    try {
+        const response: any = await api.post(`/v1/packages/`, data);
+        return response
+    } catch (error) {
+        throw new Error('Error al enviar la solicitud POST');
+    }
+}
+
+export const putFee = async (data: any) => {
     try {
         const response: any = await api.put(`/v1/fees`, data);
         return response
@@ -30,9 +40,9 @@ export const putPackage = async (data: any) => {
     }
 }
 
-export const getPackageId = async (data: any) => {
+export const getFee = async () => {
     try {
-        const response: any = await api.get(`/v1/fees`, data);
+        const response: any = await api.get(`/v1/fees`);
         return response
     } catch (error) {
         throw new Error('Error al enviar la solicitud GET');
@@ -48,7 +58,7 @@ export const getPackageList = async (pattern: string, page: number, size: number
     }
 }
 
-export const getPackageListActive = async (pattern: string, page: number, size: number) => {
+export const getPackageListDelivered = async (pattern: string, page: number, size: number) => {
     try {
         const response: any = await api.get(`/v1/packages/delivered?pattern=${pattern}&page=${page}&size=${size}`);
         return response

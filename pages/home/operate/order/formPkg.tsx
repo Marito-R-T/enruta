@@ -1,8 +1,10 @@
 import ModalTemplate from "@/components/Modal";
-import Modal from "@/components/Modal";
 import { Package } from "@/models/Package";
+import { RouteObj } from "@/models/RouteObj";
 import { Box, Button, Divider, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { getListRouteActive } from "../../../../services/RouteServices/api";
+import { getFee } from "../../../../services/PackageServices/api";
 
 type ChildComponentProps = {
     open: boolean,
@@ -12,116 +14,178 @@ type ChildComponentProps = {
   }
 
 export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage}: ChildComponentProps) {
-    const [formData, setFormData] = useState({
-        weight: 0,
-        priority: false,
-        incomeDate: null,
-        // deliveryDate: Date;
-        deliveryAddress: '',
-        // fee: FeePkg,
-        // route: RouteObj
-    });
-    const [errors, setErrors] = useState({
-        weight: false,
-        priority: false,
-        incomeDate: false,
-        // deliveryDate: Date;
-        deliveryAddress: false,
-        // fee: FeePkg,
-        // route: RouteObj
-    });
+  const [listRoutes, setListRoutes] = useState<RouteObj[]>([]);
+  const [globalFee, setGlobalFee] = useState(10);
+  const [globalFeePriority, setGlobalFeePriority] = useState(5);
+  const [formData, setFormData] = useState({
+      weight: 0,
+      priority: 1,
+      incomeDate: undefined,
+      deliveryAddress: '',
+      fee: 0,
+      prioritizedFee: 0,
+      route: 1
+  });
+  const [errors, setErrors] = useState({
+      weight: false,
+      priority: false,
+      incomeDate: false,
+      // deliveryDate: Date;
+      deliveryAddress: false,
+      fee: false,
+      prioritizedFee: false,
+      route: false
+  });
 
-    useEffect(() => {
-        // Código a ejecutar después de que el componente se monta en el DOM
-        // o cuando ciertas dependencias cambian
-        // Puedes realizar llamadas a API, actualizar el estado, etc.
-        // setFormData({ weight: 0,
-        //     priority: false,
-        //     incomeDate: null,
-        //     // deliveryDate: Date;
-        //     deliveryAddress: '',
-        //     // fee: FeePkg,
-        //     // route: RouteObj 
-        // });
-        //   setErrors({ 
-        //     weight: false,
-        //     priority: false,
-        //     incomeDate: false,
-        //     // deliveryDate: Date;
-        //     deliveryAddress: false,
-        //     // fee: FeePkg,
-        //     // route: RouteObj
-        // });
+  const reserDataForm = () => {
+    setFormData({ 
+      weight: 0,
+      priority: 1,
+      incomeDate: undefined,
+      deliveryAddress: '',
+      fee: 0,
+      prioritizedFee: 0,
+      route: undefined
+  });
+    setErrors({ 
+      weight: false,
+      priority: false,
+      incomeDate: false,
+      deliveryAddress: false,
+      fee: false,
+      prioritizedFee: false,
+      route: false
+  });
+  }
+  useEffect(() => {
+      getRoutes();
+      getFeeGlobal();
+      reserDataForm();
 
-        return () => {
-          // Código para limpiar o cancelar cualquier efecto secundario
-          // antes de que el componente se desmonte
-        };
-      }, [open]);
+      return () => {
+
+      };
+    }, [open]);
+  
+  const handleClose = () => {
+      onCloseChange();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+      setErrors({ ...errors, [name]: !value });
+  };
+
+  const handleChangeWeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
     
-    const handleClose = () => {
-        onCloseChange();
-    };
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: !value,
+    }));
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        
-        
-        setFormData({ ...formData, [name]: value });
-        
-        // Validar el campo después de cada cambio y establecer el estado de error
-        setErrors({ ...errors, [name]: !value });
-        // setPhoneNumberError(!validatePhoneNumber());
-    };
+    setFeeCalculate(value);
+  };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+  const setFeeCalculate = (weight) => {
+    const name = 'fee';
+    const value = ((globalFee*parseFloat(weight))+((formData.priority==2)? globalFeePriority : 0));
+    console.log(value, ((formData.priority==2)? globalFeePriority : 0));
+    
+    setFormData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
 
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: !value,
+    }));
+  }
+  const setFeeCalculatePriority = (valuep) => {
+    const name = 'fee';
+    const value = ((globalFee*formData.weight)+((valuep==2)? globalFeePriority : 0));
+    console.log(value, ((formData.priority==2)? globalFeePriority : 0));
+    
+    setFormData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: !value,
+    }));
+  }
+
+  const handleChangePriority = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    
+    setErrors((prevValues) => ({
+      ...prevValues,
+      [name]: !value,
+    }));
+
+    console.log('valor: ', value);
+    
+
+    setFeeCalculatePriority(value);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      // Realizar validaciones adicionales y enviar el formulario si no hay errores
+      if (formData.weight && formData.incomeDate && formData.deliveryAddress && formData.priority) {
         //Crea el objeto de tipo Package
         const packageTemp: Package = {
-            id: 0,
-            weight: formData.weight,
-            priority: formData.priority,
-            incomeDate: formData.incomeDate,
-            deliveryDate: null,
-            deliveryAddress: formData.deliveryAddress,
-            fee: null,
-            route: null
+          id: 0,
+          weight: formData.weight,
+          incomeDate: formData.incomeDate,
+          deliveryDate: new Date(),
+          deliveryAddress: formData.deliveryAddress,
+          routeId: 0,
+          prioritized: (formData.priority==2)? true : false,
+          fee: 0,
+          prioritizedFee: 0
         }
         //Envia al arreglo de paquetes
         onAddPackage(packageTemp);
         onCloseChange();
-        setFormData({ weight: 0,
-            priority: false,
-            incomeDate: null,
-            // deliveryDate: Date;
-            deliveryAddress: '',
-            // fee: FeePkg,
-            // route: RouteObj 
-        });
-          setErrors({ 
-            weight: false,
-            priority: false,
-            incomeDate: false,
-            // deliveryDate: Date;
-            deliveryAddress: false,
-            // fee: FeePkg,
-            // route: RouteObj
-        });
-
-        // Realizar validaciones adicionales y enviar el formulario si no hay errores
-        // if (formData.name && formData.checkpointType && formData.latitude && formData.length && formData.feeType && formData.amount) {
-        //   try {
-        //     // const response = await postLogin({});
-        //   } catch (error) {
-        //     console.error(error);
+        console.log('Formulario enviado');
+        // Reiniciar el estado y los campos del formulario
+      }
+    };
+    
+        const getRoutes = async () => {
+          try {
+            const response = await getListRouteActive('', 0, 0);
+            setListRoutes(response);
+          } catch (error) {
+            console.error(error);
             
-        //   }
-        //   console.log('Formulario enviado');
-        //   // Reiniciar el estado y los campos del formulario
-        
-        // }
-      };
+          }
+        }
+    
+      const getFeeGlobal = async () => {
+        try {
+          const response = await getFee();
+          setGlobalFee(response.fee);
+          setGlobalFeePriority(response.prioritizedFee);
+        } catch (error) {
+          console.error(error);
+          
+        }
+      }
 
     return(
         <>
@@ -169,7 +233,7 @@ export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage
                           endAdornment: <InputAdornment position="start">LBS</InputAdornment>, 
                         }}
                         value={formData.weight}
-                        onChange={handleChange}
+                        onChange={handleChangeWeight}
                         error={errors.weight}
                         helperText={errors.weight ? 'Campo requerido' : ''}
                       />
@@ -202,50 +266,22 @@ export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage
                   <Box>
                     <TextField
                       select
-                    //   required
+                      // required
                       fullWidth
                       id="route"
                       label="Ruta"
                       name='route'
-                      // value={currency}
-                      // onChange={handleChange}
-                      // helperText="Please select your currency"
-                    //   value={formData.checkpointType}
-                    //   onChange={handleChange}
-                    //   error={errors.checkpointType}
-                    //   helperText={errors.checkpointType ? 'Campo requerido' : ''}
+                      value={formData.route}
+                      onChange={handleChange}
+                      error={errors.route}
+                      helperText={errors.route ? 'Campo requerido' : ''}
                     >
-                      {/* {listCheckpointsType.map((checkpointType) => (
-                        <MenuItem key={checkpointType.id} value={checkpointType.id}>
-                          {checkpointType.name}
+                      {listRoutes.map((itemRoute) => (
+                        <MenuItem key={itemRoute.id} value={itemRoute.id}>
+                          {itemRoute.name}
                         </MenuItem>
-                      ))} */}
+                      ))}
                     </TextField>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Box>
-                    <TextField
-                        margin="normal"
-                        // required
-                        fullWidth
-                        id="amount"
-                        label="Tarifa"
-                        name="amount"
-                        autoFocus
-                        type='number'
-                        InputProps={{ 
-                          inputProps: { 
-                            min: 0.00, 
-                            step: 0.01, 
-                          },
-                          startAdornment: <InputAdornment position="start">Q</InputAdornment>, 
-                        }}
-                        // value={formData.amount}
-                        // onChange={handleChange}
-                        // error={errors.amount}
-                        // helperText={errors.amount ? 'Campo requerido' : ''}
-                      />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6} mt={2}>
@@ -254,36 +290,32 @@ export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage
                         select
                         // required
                         fullWidth
-                        id="feeType"
+                        id="priority"
                         label="Prioridad"
-                        name='feeType'
-                        // value={currency}
-                        // onChange={handleChange}
-                        // helperText="Please select your currency"
-                        // value={formData.feeType}
-                        // onChange={handleChange}
-                        // error={errors.feeType}
-                        // helperText={errors.feeType ? 'Campo requerido' : ''}
+                        name='priority'
+                        value={formData.priority}
+                        onChange={handleChangePriority}
+                        error={errors.priority}
+                        helperText={errors.priority ? 'Campo requerido' : ''}
                       >
-                        {/* {listCheckpointsType.map((checkpointType) => (
-                          <MenuItem key={checkpointType.id} value={checkpointType.id}>
-                            {checkpointType.name}
-                          </MenuItem>
-                        ))} */}
+                        <MenuItem key={1} value={1}>
+                          NO
+                        </MenuItem>
+                        <MenuItem key={2} value={2}>
+                          SI
+                        </MenuItem>
                       </TextField>
                   </Box>
                 </Grid>
-
-                <Divider/>
                 <Grid item xs={12} md={6}>
                   <Box>
                     <TextField
                         margin="normal"
                         // required
                         fullWidth
-                        id="amount"
-                        label="Tarifa de Prioridad"
-                        name="amount"
+                        id="fee"
+                        label="Tarifa"
+                        name="fee"
                         autoFocus
                         type='number'
                         InputProps={{ 
@@ -293,10 +325,39 @@ export default function FormPkg({open, onOpenChange, onCloseChange, onAddPackage
                           },
                           startAdornment: <InputAdornment position="start">Q</InputAdornment>, 
                         }}
-                        // value={formData.amount}
-                        // onChange={handleChange}
-                        // error={errors.amount}
-                        // helperText={errors.amount ? 'Campo requerido' : ''}
+                        value={formData.fee}
+                        onChange={handleChange}
+                        error={errors.fee}
+                        helperText={errors.fee ? 'Campo requerido' : ''}
+                      />
+                  </Box>
+                </Grid>
+                
+
+                <Divider/>
+                <Grid item xs={12} md={6}>
+                  <Box>
+                    <TextField
+                        margin="normal"
+                        // required
+                        disabled
+                        fullWidth
+                        id="prioritizedFee"
+                        label="Tarifa de Prioridad"
+                        name="prioritizedFee"
+                        autoFocus
+                        type='number'
+                        InputProps={{ 
+                          inputProps: { 
+                            min: 0.00, 
+                            step: 0.01, 
+                          },
+                          startAdornment: <InputAdornment position="start">Q</InputAdornment>, 
+                        }}
+                        value={formData.prioritizedFee}
+                        onChange={handleChange}
+                        error={errors.prioritizedFee}
+                        helperText={errors.prioritizedFee ? 'Campo requerido' : ''}
                       />
                   </Box>
                 </Grid>

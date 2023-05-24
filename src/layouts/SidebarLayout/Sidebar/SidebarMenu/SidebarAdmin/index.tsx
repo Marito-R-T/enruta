@@ -204,7 +204,7 @@ function SidebarAdmin(){
                   </Button>
                 </Link>
               </ListItem>
-              <ListItem component="div">
+              {/* <ListItem component="div">
                 <Link href="/home/admin/costs" passHref>
                   <Button
                     className={
@@ -233,7 +233,7 @@ function SidebarAdmin(){
                     Cuotas
                   </Button>
                 </Link>
-              </ListItem>
+              </ListItem> */}
               <ListItem component="div">
                 <Link href="/home/admin/users" passHref>
                   <Button
