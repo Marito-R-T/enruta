@@ -86,6 +86,8 @@ export default function ModalAddPC() {
     if (formData.name && formData.checkpointType && formData.latitude && formData.length && formData.feeType && formData.amount) {
       try {
         const response = await postCheckpoint(formData);
+        console.log(response);
+        
         handleClose();
       } catch (error) {
         console.error(error);
