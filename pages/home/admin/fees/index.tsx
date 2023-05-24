@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
-import PageHeader from '@/content/Home/PageHeader';
+import { useState } from 'react';
 import Footer from '@/components/Footer';
 import {
   Typography,
